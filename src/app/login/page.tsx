@@ -13,7 +13,7 @@ type AuthResponse = {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,11 +23,11 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     try {
-      const data = await api.post<AuthResponse>("/api/auth/login", { login, password });
+      const data = await api.post<AuthResponse>("/api/auth/login", { email, password });
       saveAuth(data.token, { login: data.login, roles: data.roles });
       router.push(isAdmin({ login: data.login, roles: data.roles }) ? "/admin" : "/dashboard");
     } catch {
-      setError("Usuario o contraseña incorrectos");
+      setError("Correo o contraseña incorrectos");
     } finally {
       setLoading(false);
     }
@@ -42,13 +42,13 @@ export default function LoginPage() {
         <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Iniciar sesión</h1>
 
         <input
-          type="text"
-          placeholder="Usuario"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="border border-zinc-300 dark:border-zinc-700 rounded-lg px-3 py-2 bg-transparent text-sm outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
           required
-          autoComplete="username"
+          autoComplete="email"
         />
 
         <input
