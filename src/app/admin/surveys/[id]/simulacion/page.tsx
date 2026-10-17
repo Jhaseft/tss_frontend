@@ -71,7 +71,7 @@ function BootstrapHistogram({
           <XAxis dataKey="x" tick={{ fontSize: 9, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 9, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
           <Tooltip
-            formatter={(v: number) => [v, "iteraciones"]}
+            formatter={(v) => [Number(v ?? 0), "iteraciones"]}
             labelFormatter={(v) => `~${Number(v).toFixed(3)}`}
             contentStyle={{ fontSize: 11, borderRadius: 8 }}
           />
