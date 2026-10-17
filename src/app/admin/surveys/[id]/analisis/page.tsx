@@ -56,11 +56,12 @@ function pLabel(p: number) {
   return `p = ${fmt(p, 3)}`;
 }
 
-function cellColor(pct: number) {
-  if (pct >= 60) return "bg-gray-800 text-white";
-  if (pct >= 40) return "bg-gray-300 text-gray-900";
-  if (pct >= 20) return "bg-gray-100 text-gray-800";
-  return "text-gray-600";
+function cellStyle(pct: number): { style: React.CSSProperties; textClass: string } {
+  const alpha = pct > 0 ? 0.07 + (pct / 100) * 0.83 : 0;
+  return {
+    style: { backgroundColor: `rgba(17, 24, 39, ${alpha.toFixed(3)})` },
+    textClass: alpha > 0.44 ? "text-white" : "text-gray-800",
+  };
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -251,14 +252,20 @@ export default function AnalisisPage() {
                       <td className="px-4 py-3 text-xs font-medium text-gray-700 whitespace-nowrap">
                         {row.length > 28 ? row.slice(0, 28) + "…" : row}
                       </td>
-                      {result.colLabels.map((_, c) => (
-                        <td key={c} className="px-3 py-3 text-center">
-                          <div className={`inline-flex flex-col items-center rounded px-2 py-1 min-w-12 ${cellColor(result.rowPct[r][c])}`}>
-                            <span className="text-xs font-semibold">{result.observed[r][c]}</span>
-                            <span className="text-xs opacity-75">{fmt(result.rowPct[r][c], 1)}%</span>
-                          </div>
-                        </td>
-                      ))}
+                      {result.colLabels.map((_, c) => {
+                        const cs = cellStyle(result.rowPct[r][c]);
+                        return (
+                          <td key={c} className="px-2 py-2 text-center">
+                            <div
+                              className={`inline-flex flex-col items-center rounded-md px-2 py-1.5 min-w-12 transition-colors ${cs.textClass}`}
+                              style={cs.style}
+                            >
+                              <span className="text-xs font-bold">{result.observed[r][c]}</span>
+                              <span className="text-xs opacity-80">{fmt(result.rowPct[r][c], 1)}%</span>
+                            </div>
+                          </td>
+                        );
+                      })}
                       <td className="px-3 py-3 text-center text-xs font-bold text-gray-700">
                         {result.rowTotals[r]}
                       </td>
@@ -276,8 +283,20 @@ export default function AnalisisPage() {
               </table>
             </div>
 
-            <div className="px-6 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
-              Celdas: n (% fila) · Porcentajes calculados sobre el total de la fila
+            <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex flex-wrap items-center gap-4">
+              <span className="text-xs text-gray-500 shrink-0">Intensidad (% fila):</span>
+              <div className="flex items-end gap-1.5">
+                {[0, 20, 40, 60, 80, 100].map((p) => {
+                  const alpha = p > 0 ? 0.07 + (p / 100) * 0.83 : 0;
+                  return (
+                    <div key={p} className="flex flex-col items-center gap-1">
+                      <div className="w-8 h-5 rounded" style={{ backgroundColor: `rgba(17,24,39,${alpha.toFixed(3)})`, border: "1px solid #e5e7eb" }} />
+                      <span className="text-xs text-gray-400">{p}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <span className="text-xs text-gray-400 ml-auto">Celdas: n · (% fila)</span>
             </div>
           </div>
 

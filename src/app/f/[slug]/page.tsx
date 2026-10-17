@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams } from "next/navigation";
 
 type Option = { id: number; displayText: string };
@@ -24,7 +24,7 @@ const TEXT_TYPES: Record<string, string> = {
   PHONE: "tel", URL: "url", NUMERIC: "number", DATE: "date",
 };
 
-export default function PublicFormPage() {
+function PublicFormPage() {
   const params = useParams();
   const slug = params?.slug as string;
 
@@ -79,61 +79,141 @@ export default function PublicFormPage() {
     }
   }
 
-  // ── Agrupar MATRIX_LIKERT por matrixGroup ──────────────────────────────────
+  // ── Renderizar preguntas con secciones y agrupación ───────────────────────
   function renderQuestions() {
     if (!form) return null;
     const rendered: React.ReactNode[] = [];
+    const qs = form.questions;
     const seenGroups = new Set<string>();
+    let skipUntil = -1;
+    let currentSection: string | null = null;
 
-    for (const q of form.questions) {
-      if (q.type === "MATRIX_LIKERT" && q.matrixGroup) {
-        if (seenGroups.has(q.matrixGroup)) continue;
-        seenGroups.add(q.matrixGroup);
-        const groupQs = form.questions.filter(
-          (gq) => gq.type === "MATRIX_LIKERT" && gq.matrixGroup === q.matrixGroup
-        );
-        const opts = groupQs[0]?.options ?? [];
+    for (let i = 0; i < qs.length; i++) {
+      const q = qs[i];
+
+      // Saltar seguidores de un grupo LIKERT ya renderizado
+      if (i < skipUntil) continue;
+
+      // Encabezado de sección cuando cambia
+      if (q.section && q.section !== currentSection) {
+        currentSection = q.section;
         rendered.push(
-          <div key={`matrix-${q.matrixGroup}`} className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-sm font-medium text-gray-900 mb-4">{q.matrixGroup}</p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="text-left py-2 pr-4 font-normal text-gray-500 w-48">Ítem</th>
-                    {opts.map((o) => (
-                      <th key={o.id} className="text-center py-2 px-2 font-medium text-gray-600 text-xs whitespace-nowrap">
-                        {o.displayText}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {groupQs.map((gq) => (
-                    <tr key={gq.id}>
-                      <td className="py-3 pr-4 text-gray-700 text-xs">{gq.text}</td>
-                      {opts.map((o) => (
-                        <td key={o.id} className="py-3 px-2 text-center">
-                          <input
-                            type="radio"
-                            name={`q-${gq.id}`}
-                            value={o.displayText}
-                            checked={answers[gq.id] === o.displayText}
-                            onChange={() => setAnswer(gq.id, o.displayText)}
-                            className="accent-gray-800"
-                          />
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div key={`section-${q.section}-${i}`} className="flex items-center gap-3 pt-4 pb-1">
+            <div className="h-px flex-1 bg-gray-200" />
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">{q.section}</span>
+            <div className="h-px flex-1 bg-gray-200" />
           </div>
         );
-      } else if (q.type !== "MATRIX_LIKERT") {
-        rendered.push(<QuestionField key={q.id} q={q} answers={answers} setAnswer={setAnswer} toggleMulti={toggleMulti} />);
       }
+
+      // MATRIX_LIKERT: agrupar por matrixGroup
+      if (q.type === "MATRIX_LIKERT" && q.matrixGroup) {
+        if (!seenGroups.has(q.matrixGroup)) {
+          seenGroups.add(q.matrixGroup);
+          const groupQs = qs.filter((gq) => gq.type === "MATRIX_LIKERT" && gq.matrixGroup === q.matrixGroup);
+          const opts = groupQs[0]?.options ?? [];
+          rendered.push(
+            <div key={`matrix-${q.matrixGroup}`} className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-sm font-semibold text-gray-800 mb-4">{q.matrixGroup}</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left py-2 pr-4 font-normal text-gray-500 w-48">Ítem</th>
+                      {opts.map((o) => (
+                        <th key={o.id} className="text-center py-2 px-2 font-medium text-gray-600 text-xs whitespace-nowrap">
+                          {o.displayText}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {groupQs.map((gq) => (
+                      <tr key={gq.id}>
+                        <td className="py-3 pr-4 text-gray-700 text-xs">{gq.text}</td>
+                        {opts.map((o) => (
+                          <td key={o.id} className="py-3 px-2 text-center">
+                            <input
+                              type="radio"
+                              name={`q-${gq.id}`}
+                              value={o.displayText}
+                              checked={answers[gq.id] === o.displayText}
+                              onChange={() => setAnswer(gq.id, o.displayText)}
+                              className="accent-gray-800"
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        }
+        continue;
+      }
+
+      // LIKERT consecutivas con misma escala → agrupar como matriz (útil para MS Forms)
+      if (q.type === "LIKERT" && (q.options?.length ?? 0) >= 2) {
+        const myOptStr = (q.options ?? []).map((o) => o.displayText).join("|||");
+        let j = i + 1;
+        while (
+          j < qs.length &&
+          qs[j].type === "LIKERT" &&
+          (qs[j].options ?? []).map((o) => o.displayText).join("|||") === myOptStr
+        ) {
+          j++;
+        }
+        if (j - i >= 2) {
+          const groupQs = qs.slice(i, j);
+          const opts = q.options ?? [];
+          rendered.push(
+            <div key={`likert-group-${i}`} className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left py-2 pr-4 font-normal text-gray-500 w-48">Ítem</th>
+                      {opts.map((o) => (
+                        <th key={o.id} className="text-center py-2 px-2 font-medium text-gray-600 text-xs whitespace-nowrap">
+                          {o.displayText}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {groupQs.map((gq) => (
+                      <tr key={gq.id}>
+                        <td className="py-3 pr-4 text-gray-700 text-xs">{gq.text}</td>
+                        {opts.map((o) => (
+                          <td key={o.id} className="py-3 px-2 text-center">
+                            <input
+                              type="radio"
+                              name={`q-${gq.id}`}
+                              value={o.displayText}
+                              checked={answers[gq.id] === o.displayText}
+                              onChange={() => setAnswer(gq.id, o.displayText)}
+                              className="accent-gray-800"
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+          skipUntil = j;
+          continue;
+        }
+      }
+
+      // Campo individual
+      rendered.push(
+        <QuestionField key={q.id} q={q} answers={answers} setAnswer={setAnswer} toggleMulti={toggleMulti} />
+      );
     }
     return rendered;
   }
@@ -194,6 +274,18 @@ export default function PublicFormPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function PublicFormPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+      </div>
+    }>
+      <PublicFormPage />
+    </Suspense>
   );
 }
 

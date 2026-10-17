@@ -66,16 +66,28 @@ function ShareButton({ slug }: { slug: string }) {
 function DeleteButton({ id, onDeleted }: { id: number; onDeleted: () => void }) {
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   async function handleDelete() {
     setLoading(true);
+    setErr(null);
     try {
       await api.delete(`/api/surveys/${id}`);
       onDeleted();
+    } catch {
+      setErr("No se pudo borrar. Intenta de nuevo.");
+      setConfirm(false);
     } finally {
       setLoading(false);
-      setConfirm(false);
     }
+  }
+
+  if (err) {
+    return (
+      <span className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-2 py-1">
+        {err}
+      </span>
+    );
   }
 
   if (confirm) {
