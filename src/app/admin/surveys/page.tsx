@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 
 type Survey = {
@@ -60,6 +60,66 @@ function ShareButton({ slug }: { slug: string }) {
         </>
       )}
     </button>
+  );
+}
+
+function ImportResponsesButton({ id, onDone }: { id: number; onDone: (n: number) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+
+  async function handleFile(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    setLoading(true);
+    setMsg(null);
+    try {
+      const form = new FormData();
+      form.append("file", files[0]);
+      const res = await api.postFile<{ rowsLoaded: number; questionsDetected: number; errors: string[] }>(
+        `/api/surveys/${id}/import-responses`,
+        form
+      );
+      setMsg({ text: `${res.rowsLoaded} respuestas cargadas`, ok: true });
+      onDone(res.rowsLoaded);
+    } catch {
+      setMsg({ text: "Error al importar", ok: false });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".csv,.xlsx,.xls"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files)}
+      />
+      {msg ? (
+        <span className={`text-xs px-2 py-1 rounded ${msg.ok ? "text-green-700 bg-green-50" : "text-red-600 bg-red-50"}`}>
+          {msg.text}
+        </span>
+      ) : (
+        <button
+          onClick={() => inputRef.current?.click()}
+          disabled={loading}
+          title="Importar respuestas CSV a esta encuesta"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-colors disabled:opacity-50"
+        >
+          {loading ? (
+            <span className="w-3.5 h-3.5 border border-gray-400 border-t-gray-900 rounded-full animate-spin" />
+          ) : (
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M12 3v13.5m0 0l-4.5-4.5M12 16.5l4.5-4.5" />
+            </svg>
+          )}
+          Importar CSV
+        </button>
+      )}
+    </>
   );
 }
 
@@ -197,6 +257,12 @@ export default function SurveysPage() {
                         </svg>
                         Dashboard
                       </Link>
+                      <ImportResponsesButton
+                        id={s.id}
+                        onDone={(n) => setSurveys((prev) =>
+                          prev.map((x) => x.id === s.id ? { ...x, responseCount: x.responseCount + n } : x)
+                        )}
+                      />
                       <ShareButton slug={s.publicSlug} />
                       <DeleteButton
                         id={s.id}

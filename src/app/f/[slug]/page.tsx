@@ -106,14 +106,20 @@ function PublicFormPage() {
         );
       }
 
-      // MATRIX_LIKERT: agrupar por matrixGroup
+      // MATRIX_LIKERT: agrupar por (section + matrixGroup) para no mezclar secciones
       if (q.type === "MATRIX_LIKERT" && q.matrixGroup) {
-        if (!seenGroups.has(q.matrixGroup)) {
-          seenGroups.add(q.matrixGroup);
-          const groupQs = qs.filter((gq) => gq.type === "MATRIX_LIKERT" && gq.matrixGroup === q.matrixGroup);
+        const groupKey = `${q.section ?? ""}|||${q.matrixGroup}`;
+        if (!seenGroups.has(groupKey)) {
+          seenGroups.add(groupKey);
+          const groupQs = qs.filter(
+            (gq) =>
+              gq.type === "MATRIX_LIKERT" &&
+              gq.matrixGroup === q.matrixGroup &&
+              gq.section === q.section
+          );
           const opts = groupQs[0]?.options ?? [];
           rendered.push(
-            <div key={`matrix-${q.matrixGroup}`} className="bg-white border border-gray-200 rounded-xl p-5">
+            <div key={`matrix-${groupKey}`} className="bg-white border border-gray-200 rounded-xl p-5">
               <p className="text-sm font-semibold text-gray-800 mb-4">{q.matrixGroup}</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
