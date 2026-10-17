@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -51,7 +52,7 @@ const navGroups: NavGroup[] = [
   },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -113,5 +114,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <main className="flex-1 ml-56">{children}</main>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen bg-gray-50" />}>
+      <AdminShell>{children}</AdminShell>
+    </Suspense>
   );
 }
