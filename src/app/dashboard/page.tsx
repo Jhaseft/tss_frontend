@@ -14,7 +14,7 @@ export default function DashboardPage() {
       router.replace("/login");
       return;
     }
-    setLogin(user.login);
+    setLogin(user.email);
   }, [router]);
 
   function handleLogout() {

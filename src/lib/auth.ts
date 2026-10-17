@@ -2,7 +2,7 @@ const TOKEN_KEY = "auth_token";
 const USER_KEY = "auth_user";
 
 export type AuthUser = {
-  login: string;
+  email: string;
   roles: string[];
 };
 

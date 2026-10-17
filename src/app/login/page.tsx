@@ -7,7 +7,7 @@ import { saveAuth, isAdmin } from "@/lib/auth";
 
 type AuthResponse = {
   token: string;
-  login: string;
+  email: string;
   roles: string[];
 };
 
@@ -24,8 +24,8 @@ export default function LoginPage() {
     setError("");
     try {
       const data = await api.post<AuthResponse>("/api/auth/login", { email, password });
-      saveAuth(data.token, { login: data.login, roles: data.roles });
-      router.push(isAdmin({ login: data.login, roles: data.roles }) ? "/admin" : "/dashboard");
+      saveAuth(data.token, { email: data.email, roles: data.roles });
+      router.push(isAdmin({ email: data.email, roles: data.roles }) ? "/admin" : "/dashboard");
     } catch {
       setError("Correo o contraseña incorrectos");
     } finally {

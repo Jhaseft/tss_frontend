@@ -6,7 +6,6 @@ import { api } from "@/lib/api";
 type Authority = { name: string };
 type User = {
   id: number;
-  login: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
@@ -14,7 +13,7 @@ type User = {
   authorities: Authority[];
 };
 
-const EMPTY_FORM = { login: "", email: "", firstName: "", lastName: "", password: "", roles: [] as string[] };
+const EMPTY_FORM = { email: "", firstName: "", lastName: "", password: "", roles: [] as string[] };
 const EMPTY_EDIT = { email: "", firstName: "", lastName: "", activated: true, password: "", roles: [] as string[] };
 
 export default function UsersPage() {
@@ -32,9 +31,7 @@ export default function UsersPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchAll();
-  }, []);
+  useEffect(() => { fetchAll(); }, []);
 
   async function fetchAll() {
     setLoading(true);
@@ -66,7 +63,7 @@ export default function UsersPage() {
     setSaving(true);
     setError("");
     try {
-      await api.post("/api/users", { ...createForm });
+      await api.post("/api/users", createForm);
       setShowCreate(false);
       setCreateForm(EMPTY_FORM);
       await fetchAll();
@@ -124,9 +121,8 @@ export default function UsersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Login</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Nombre</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Correo</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Roles</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Estado</th>
                 <th className="px-4 py-3" />
@@ -135,9 +131,10 @@ export default function UsersPage() {
             <tbody>
               {users.map((u) => (
                 <tr key={u.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium text-gray-900">{u.login}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900">
+                    {[u.firstName, u.lastName].filter(Boolean).join(" ") || "—"}
+                  </td>
                   <td className="px-4 py-3 text-gray-500">{u.email}</td>
-                  <td className="px-4 py-3 text-gray-500">{[u.firstName, u.lastName].filter(Boolean).join(" ") || "—"}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1 flex-wrap">
                       {u.authorities.map((a) => (
@@ -170,11 +167,10 @@ export default function UsersPage() {
         <Modal title="Nuevo usuario" onClose={() => setShowCreate(false)}>
           <form onSubmit={handleCreate} className="flex flex-col gap-3">
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Login"><input required value={createForm.login} onChange={(e) => setCreateForm({ ...createForm, login: e.target.value })} /></Field>
-              <Field label="Email"><input required type="email" value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} /></Field>
               <Field label="Nombre"><input value={createForm.firstName} onChange={(e) => setCreateForm({ ...createForm, firstName: e.target.value })} /></Field>
               <Field label="Apellido"><input value={createForm.lastName} onChange={(e) => setCreateForm({ ...createForm, lastName: e.target.value })} /></Field>
             </div>
+            <Field label="Correo"><input required type="email" value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} /></Field>
             <Field label="Contraseña"><input required type="password" value={createForm.password} onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })} /></Field>
             <Field label="Roles">
               <div className="flex gap-2 flex-wrap mt-1">
@@ -191,14 +187,14 @@ export default function UsersPage() {
 
       {/* Modal editar */}
       {editTarget && (
-        <Modal title={`Editar — ${editTarget.login}`} onClose={() => setEditTarget(null)}>
+        <Modal title={`Editar — ${editTarget.email}`} onClose={() => setEditTarget(null)}>
           <form onSubmit={handleEdit} className="flex flex-col gap-3">
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Email"><input required type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} /></Field>
               <Field label="Nombre"><input value={editForm.firstName} onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })} /></Field>
               <Field label="Apellido"><input value={editForm.lastName} onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })} /></Field>
-              <Field label="Nueva contraseña (opcional)"><input type="password" value={editForm.password} onChange={(e) => setEditForm({ ...editForm, password: e.target.value })} /></Field>
             </div>
+            <Field label="Correo"><input required type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} /></Field>
+            <Field label="Nueva contraseña (opcional)"><input type="password" value={editForm.password} onChange={(e) => setEditForm({ ...editForm, password: e.target.value })} /></Field>
             <div className="flex items-center gap-2">
               <input type="checkbox" id="activated" checked={editForm.activated} onChange={(e) => setEditForm({ ...editForm, activated: e.target.checked })} className="rounded" />
               <label htmlFor="activated" className="text-sm text-gray-600">Activo</label>
@@ -219,7 +215,9 @@ export default function UsersPage() {
       {/* Confirm eliminar */}
       {deleteTarget && (
         <Modal title="Eliminar usuario" onClose={() => setDeleteTarget(null)}>
-          <p className="text-sm text-gray-600 mb-4">¿Seguro que quieres eliminar a <strong>{deleteTarget.login}</strong>? Esta acción no se puede deshacer.</p>
+          <p className="text-sm text-gray-600 mb-4">
+            ¿Seguro que quieres eliminar a <strong>{deleteTarget.email}</strong>? Esta acción no se puede deshacer.
+          </p>
           <div className="flex justify-end gap-3">
             <button onClick={() => setDeleteTarget(null)} className="text-sm px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Cancelar</button>
             <button onClick={handleDelete} disabled={saving} className="text-sm px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
