@@ -115,7 +115,7 @@ export default function AnalisisPage() {
   const effect = result ? effectLabel(result.cramersV) : null;
 
   return (
-    <div className="p-8 space-y-8 max-w-5xl">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl">
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Análisis de asociación</h1>
         <p className="text-sm text-gray-500 mt-0.5">

@@ -73,7 +73,7 @@ export default function DashboardPage() {
   const matrixCount = stats.questions.filter((q) => q.type === "MATRIX_LIKERT").length;
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 sm:p-8 space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <KpiCard label="Total respuestas" value={stats.totalResponses} />

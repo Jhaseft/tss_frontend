@@ -136,8 +136,8 @@ export default function UploadSurveyPage() {
   }
 
   return (
-    <div className="p-8 max-w-2xl">
-      <div className="flex items-start justify-between mb-6">
+    <div className="p-4 sm:p-8 max-w-2xl">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl font-semibold text-gray-900">Nueva encuesta</h1>
           <p className="text-sm text-gray-500 mt-0.5">

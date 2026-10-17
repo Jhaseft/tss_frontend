@@ -57,7 +57,7 @@ export default function RolesPage() {
   }
 
   return (
-    <div>
+    <div className="p-4 sm:p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Roles</h1>
         <button

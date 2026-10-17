@@ -71,7 +71,7 @@ export default function ExportarPage() {
     : null;
 
   return (
-    <div className="p-8 max-w-2xl space-y-6">
+    <div className="p-4 sm:p-8 max-w-2xl space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Exportar</h1>
         <p className="text-sm text-gray-500 mt-0.5">

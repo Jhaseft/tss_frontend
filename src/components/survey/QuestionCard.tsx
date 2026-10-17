@@ -40,7 +40,7 @@ function CategoricalChart({ data, totalAnswered, mean }: {
       <div className="space-y-2 mt-3">
         {sorted.map((entry, i) => (
           <div key={i} className="flex items-center gap-3 text-sm">
-            <span className="w-44 shrink-0 text-gray-600 truncate" title={entry.label}>{entry.label}</span>
+            <span className="w-24 sm:w-44 shrink-0 text-gray-600 truncate" title={entry.label}>{entry.label}</span>
             <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
               <div className="h-2 rounded-full bg-gray-800 transition-all" style={{ width: `${entry.percentage}%` }} />
             </div>

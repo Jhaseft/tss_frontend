@@ -128,7 +128,7 @@ export default function SimulacionPage() {
   }
 
   return (
-    <div className="p-8 space-y-8 max-w-4xl">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-4xl">
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Simulación Bootstrap</h1>
         <p className="text-sm text-gray-500 mt-0.5">
@@ -238,6 +238,7 @@ export default function SimulacionPage() {
                 <div className="px-6 py-4 border-b border-gray-100">
                   <p className="text-sm font-semibold text-gray-900">Intervalos de confianza por opción (95%)</p>
                 </div>
+                <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
@@ -271,6 +272,7 @@ export default function SimulacionPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
 
               {/* Histogramas */}

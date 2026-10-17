@@ -103,7 +103,7 @@ export default function UsersPage() {
   }
 
   return (
-    <div>
+    <div className="p-4 sm:p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Usuarios</h1>
         <button
@@ -118,6 +118,7 @@ export default function UsersPage() {
         <p className="text-sm text-gray-400">Cargando...</p>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
@@ -159,6 +160,7 @@ export default function UsersPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
