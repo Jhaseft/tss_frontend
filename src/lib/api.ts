@@ -19,4 +19,8 @@ export const api = {
   put: <T>(path: string, body: unknown) =>
     client.put<T>(path, body).then((r) => r.data),
   delete: <T>(path: string) => client.delete<T>(path).then((r) => r.data),
+  postFile: <T>(path: string, formData: FormData) =>
+    client
+      .post<T>(path, formData, { headers: { "Content-Type": "multipart/form-data" } })
+      .then((r) => r.data),
 };

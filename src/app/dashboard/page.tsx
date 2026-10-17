@@ -16,7 +16,7 @@ export default function DashboardPage() {
     }
     setLogin(user.email);
   }, [router]);
-
+                    
   function handleLogout() {
     clearAuth();
     router.push("/login");
