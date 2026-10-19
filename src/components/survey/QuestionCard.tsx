@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 type FreqEntry = { label: string; count: number; percentage: number; numericValue?: number };
-type MatrixItem = { questionId: number; text: string; mean?: number; distribution: FreqEntry[] };
+type MatrixItem = { questionId: number; text: string; mean?: number; stdDev?: number; distribution: FreqEntry[] };
 
 export type QuestionStats = {
   questionId: number;
@@ -31,10 +31,29 @@ function fmt(n: number | undefined, decimals = 1) {
   return n == null ? "—" : n.toFixed(decimals);
 }
 
-function CategoricalChart({ data, totalAnswered, mean }: {
-  data: FreqEntry[]; totalAnswered: number; mean?: number;
+function CategoricalChart({ data, totalAnswered, mean, stdDev, multi }: {
+  data: FreqEntry[]; totalAnswered: number; mean?: number; stdDev?: number; multi?: boolean;
 }) {
   const sorted = [...data].sort((a, b) => b.count - a.count);
+
+  // Concentración crítica (HU2): detectar las pocas opciones que agrupan ≥70%.
+  // En selección múltiple los % no suman 100, así que se evalúa cada opción por separado.
+  const THRESHOLD = 70;
+  const highlight = new Set<number>();
+  let concentrationNote: string | null = null;
+  if (multi) {
+    sorted.forEach((e, i) => { if (e.percentage >= THRESHOLD) highlight.add(i); });
+    if (highlight.size > 0)
+      concentrationNote = `${highlight.size} opción(es) superan el ${THRESHOLD}% de los encuestados.`;
+  } else if (sorted.length >= 3) {
+    let cum = 0, k = 0;
+    for (; k < sorted.length; k++) { cum += sorted[k].percentage; if (cum >= THRESHOLD) { k++; break; } }
+    if (k <= Math.ceil(sorted.length / 2) && cum >= THRESHOLD) {
+      for (let i = 0; i < k; i++) highlight.add(i);
+      concentrationNote = `Concentración crítica: ${k} opción(es) agrupan ${fmt(cum)}% de las respuestas (≥${THRESHOLD}%).`;
+    }
+  }
+
   return (
     <div>
       <div className="space-y-2 mt-3">
@@ -42,7 +61,10 @@ function CategoricalChart({ data, totalAnswered, mean }: {
           <div key={i} className="flex items-center gap-3 text-sm">
             <span className="w-24 sm:w-44 shrink-0 text-gray-600 truncate" title={entry.label}>{entry.label}</span>
             <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-              <div className="h-2 rounded-full bg-gray-800 transition-all" style={{ width: `${entry.percentage}%` }} />
+              <div
+                className={`h-2 rounded-full transition-all ${highlight.has(i) ? "bg-indigo-600" : "bg-gray-800"}`}
+                style={{ width: `${entry.percentage}%` }}
+              />
             </div>
             <span className="w-16 text-right text-gray-700 font-medium shrink-0">
               {entry.count} <span className="text-gray-400 font-normal">({fmt(entry.percentage)}%)</span>
@@ -50,10 +72,16 @@ function CategoricalChart({ data, totalAnswered, mean }: {
           </div>
         ))}
       </div>
-      <div className="mt-3 flex gap-4 text-xs text-gray-400">
+      <div className="mt-3 flex gap-4 text-xs text-gray-400 flex-wrap">
         <span>n = {totalAnswered}</span>
         {mean != null && <span>Media = {fmt(mean, 2)}</span>}
+        {stdDev != null && <span>Desv. Est. = {fmt(stdDev, 2)}</span>}
       </div>
+      {concentrationNote && (
+        <p className="mt-2 text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-1.5">
+          ⚠ {concentrationNote}
+        </p>
+      )}
     </div>
   );
 }
@@ -123,7 +151,12 @@ function MatrixCard({ items, totalAnswered }: { items: MatrixItem[]; totalAnswer
                   <span className="shrink-0 w-5 h-5 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-bold mt-0.5">
                     {idx + 1}
                   </span>
-                  <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+                  <div>
+                    <p className="text-xs text-gray-600 leading-snug">{item.text}</p>
+                    <p className="text-xs text-gray-400">
+                      Media {fmt(item.mean, 2)} · DE {fmt(item.stdDev, 2)}
+                    </p>
+                  </div>
                 </div>
               ))}
               <p className="text-xs text-gray-400 pt-2">Escala: 1 – {scaleMax}</p>
@@ -142,6 +175,7 @@ function MatrixCard({ items, totalAnswered }: { items: MatrixItem[]; totalAnswer
                 <th key={i} className="text-right py-2 px-2 font-medium text-gray-500 whitespace-nowrap">{l}</th>
               ))}
               <th className="text-right py-2 pl-3 font-medium text-gray-900">Media</th>
+              <th className="text-right py-2 pl-3 font-medium text-gray-500 whitespace-nowrap">Desv. Est.</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -166,6 +200,9 @@ function MatrixCard({ items, totalAnswered }: { items: MatrixItem[]; totalAnswer
                   ))}
                   <td className="text-right py-2 pl-3 font-semibold text-gray-900">
                     {fmt(item.mean, 2)}
+                  </td>
+                  <td className="text-right py-2 pl-3 text-gray-500">
+                    {fmt(item.stdDev, 2)}
                   </td>
                 </tr>
               );
@@ -222,7 +259,13 @@ export function QuestionCard({ q }: { q: QuestionStats }) {
       </div>
 
       {CATEGORICAL.has(q.type) && q.distribution && (
-        <CategoricalChart data={q.distribution} totalAnswered={q.totalAnswered} mean={q.mean} />
+        <CategoricalChart
+          data={q.distribution}
+          totalAnswered={q.totalAnswered}
+          mean={q.mean}
+          stdDev={q.stdDev}
+          multi={q.type === "MULTIPLE_CHOICE"}
+        />
       )}
 
       {q.type === "MATRIX_LIKERT" && q.matrixItems && (
