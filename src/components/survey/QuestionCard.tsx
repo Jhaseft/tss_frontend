@@ -23,6 +23,7 @@ export type QuestionStats = {
   max?: number;
   matrixItems?: MatrixItem[];
   sampleResponses?: string[];
+  keywords?: FreqEntry[];
 };
 
 const CATEGORICAL = new Set(["SINGLE_NOMINAL", "SINGLE_ORDINAL", "MULTIPLE_CHOICE", "LIKERT"]);
@@ -235,15 +236,42 @@ function NumericCard({ q }: { q: QuestionStats }) {
   );
 }
 
-function TextCard({ samples, n }: { samples: string[]; n: number }) {
+function KeywordChart({ data, n }: { data: FreqEntry[]; n: number }) {
+  const max = Math.max(...data.map((d) => d.count), 1);
   return (
-    <div className="mt-3 space-y-1.5">
-      {samples.map((s, i) => (
-        <p key={i} className="text-sm text-gray-600 bg-gray-50 rounded px-3 py-1.5 truncate" title={s}>{s}</p>
-      ))}
-      <p className="text-xs text-gray-400 pt-1">
-        n = {n} {samples.length < n && `(mostrando ${samples.length})`}
+    <div className="mb-4 border border-gray-100 rounded-xl p-4 bg-gray-50">
+      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        Palabras clave — menciones (n = {n})
       </p>
+      <div className="space-y-2">
+        {data.map((entry, i) => (
+          <div key={i} className="flex items-center gap-3 text-sm">
+            <span className="w-32 sm:w-44 shrink-0 text-gray-600 truncate" title={entry.label}>{entry.label}</span>
+            <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="h-2 rounded-full bg-gray-800 transition-all" style={{ width: `${(entry.count / max) * 100}%` }} />
+            </div>
+            <span className="w-16 text-right text-gray-700 font-medium shrink-0">
+              {entry.count} <span className="text-gray-400 font-normal">({fmt(entry.percentage)}%)</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TextCard({ samples, n, keywords }: { samples: string[]; n: number; keywords?: FreqEntry[] }) {
+  return (
+    <div className="mt-3">
+      {keywords && keywords.length > 0 && <KeywordChart data={keywords} n={n} />}
+      <div className="space-y-1.5">
+        {samples.map((s, i) => (
+          <p key={i} className="text-sm text-gray-600 bg-gray-50 rounded px-3 py-1.5 truncate" title={s}>{s}</p>
+        ))}
+        <p className="text-xs text-gray-400 pt-1">
+          n = {n} {samples.length < n && `(mostrando ${samples.length})`}
+        </p>
+      </div>
     </div>
   );
 }
@@ -275,7 +303,7 @@ export function QuestionCard({ q }: { q: QuestionStats }) {
       {q.type === "NUMERIC" && <NumericCard q={q} />}
 
       {["TEXT_SHORT", "TEXT_LONG", "EMAIL", "PHONE", "URL", "DATE"].includes(q.type) && (
-        <TextCard samples={q.sampleResponses ?? []} n={q.totalAnswered} />
+        <TextCard samples={q.sampleResponses ?? []} n={q.totalAnswered} keywords={q.keywords} />
       )}
     </div>
   );
