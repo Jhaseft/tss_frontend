@@ -1,0 +1,1057 @@
+﻿Guía Metodológica y Técnica Integral
+Análisis de Mercado y Herramienta de Recolección de Datos
+(Enfoque ARCUSUR)
+
+
+
+
+
+
+
+
+Elaborado por: Crhistofer Vera Callizaya
+                          Mayra Villarroel Castellon
+                          Saat Solares Jhaseft
+                        
+        Docente: ING. HENRRY FRANK VILLARROEL TAPIA
+        Materia: TALLER DE SIMULACIÓN DE SISTEMAS
+
+
+Cochabamba - Bolivia  
+Tabla de contenido
+1. Introducción y Justificación        1
+1.1 Antecedentes del estudio de mercado        1
+1.2 Objetivos        1
+1.2.1 Objetivo General        1
+1.2.2 Objetivos Específicos        1
+1.3 Justificación        2
+2. Marco Metodológico        2
+2.1 Diseño de la investigación        2
+2.2 Población Objetivo        3
+2.3 Técnicas de recolección de datos        3
+2.4 Pipeline de procesamiento estadístico        4
+3. Análisis de la Demanda Educativa y Perfil de los Titulados        5
+3.1 Caracterización demográfica        5
+3.2 Caracterización Temporal        7
+3.3 Indicadores de formación continua y fuentes de financiamiento        10
+4. Análisis de la Oferta Laboral y Requerimientos del Sector Productivo        14
+4.1 Mapeo de áreas tecnológicas de alta demanda        15
+4.2 Evaluación de competencias profesionales        17
+4.2.1 Competencias técnicas (Hard Skills)        17
+4.2.2 Competencias transversales (Soft Skills)        19
+4.2.3 Ejemplos prácticos de modelamiento analítico        21
+5. Diagnóstico y Síntesis de resultados        26
+5.1 Matrices de frecuencia cruzada y cruces de variables clave        26
+5.2 Hallazgos principales para la Dirección de Carrera        26
+6. Conclusiones y propuestas estratégicas        27
+6.1 Conclusiones del análisis de mercado        27
+6.2 Propuestas Estratégicas y Líneas de acción        28
+6.2.1 Fomento y diversificación de becas        28
+6.2.2 Diseño de posgrados modulares        28
+6.2.3 Estrategias de vinculación empresarial B2B        28
+6.2.4 Creación de un observatorio permanente        29
+7. Referencias Bibliográficas        29
+8. Anexos        30
+
+
+
+
+1. Introducción y Justificación
+1.1 Antecedentes del estudio de mercado
+        La carrera de Ingeniería de Sistemas de la Universidad Mayor de San Simón (UMSS), dependiente de la Facultad de Ciencias y Tecnología, se encuentra en proceso de autoevaluación con miras a su acreditación en el Sistema ARCU-SUR, mecanismo regional que evalúa la calidad de las carreras universitarias de los países del MERCOSUR y asociados. Uno de los criterios de este sistema exige que la carrera cuente con evidencia sobre la pertinencia de su plan de estudios, la inserción laboral de sus titulados y la relación con el sector productivo.
+En ese marco, la Dirección de Carrera solicitó, mediante cartas oficiales (DIR SIS 141/2026 y 143/2026, anexas), la colaboración de titulados y organizaciones empleadoras para el llenado de encuestas. Las respuestas fueron recolectadas por los distintos grupos de la materia Taller de Simulación de Sistemas y consolidadas en una base común. Esto permitió trabajar con 148 titulados y 80 organizaciones empleadoras, y centralizar su procesamiento en un sistema web propio que automatiza la estadística descriptiva, las pruebas de asociación y la visualización de resultados.
+Este estudio parte de que el mercado tecnológico cambia con rapidez, sobre todo en inteligencia artificial, ciberseguridad y nube. Por eso resulta necesario contrastar lo que ofrece la carrera con lo que demandan los empleadores y con las expectativas de formación continua de sus propios titulados.
+1.2 Objetivos
+1.2.1 Objetivo General
+Analizar la demanda educativa y el perfil de los titulados de Ingeniería de Sistemas de la UMSS, junto con los requerimientos del sector productivo tecnológico, mediante una herramienta de recolección y procesamiento de datos, para generar insumos que sustenten la actualización curricular y las propuestas de formación posgradual de la carrera en el marco de la acreditación ARCU-SUR. 
+1.2.2 Objetivos Específicos
+1. Caracterizar demográfica y temporalmente a los titulados (edad, género, situación laboral, años de vida profesional e inserción laboral).
+2. Determinar los indicadores de formación continua, la demanda potencial de posgrado, las áreas de interés y las fuentes de financiamiento de los titulados.
+3. Identificar las áreas tecnológicas, las competencias técnicas y las competencias transversales que demandan las organizaciones empleadoras.
+4. Contrastar la formación recibida con los requerimientos del mercado laboral para detectar brechas de competencias, aplicando estadística univariada y bivariada (prueba Chi-cuadrado).
+5. Proponer líneas de acción estratégicas para la Dirección de Carrera, como becas, posgrados modulares, vinculación empresarial y un observatorio permanente.
+
+
+1.3 Justificación
+El proceso de acreditación ARCU-SUR exige decisiones basadas en evidencia, y la carrera no cuenta aún con un diagnóstico actualizado y sistematizado de su entorno. Este estudio responde a esa necesidad, por tres razones.
+* Pertinencia académica. Los resultados muestran que el 71,6 % de los titulados considera que el principal aspecto a mejorar es la actualización constante del plan de estudios. A su vez, el 69,6 % de los empleadores señala la inteligencia artificial y el  machine learning como el área de mayor interés. Contar con estos datos permite orientar la actualización curricular hacia necesidades reales y no supuestas.
+* Demanda de formación posgradual. El 83,1 % de los titulados manifiesta interés en un posgrado y el 91,8 % de quienes ya se formaron financió sus estudios con recursos propios. Esto permite fundamentar la oferta de programas pertinentes y mecanismos de financiamiento.
+* Aporte metodológico. El estudio no se limita a describir resultados. Integra una herramienta propia (React, Spring Boot y PostgreSQL) que estandariza la recolección, el procesamiento y la visualización de los datos. La Carrera podrá utilizarla en futuros ciclos de evaluación y, con ella, repetir el estudio periódicamente.
+2. Marco Metodológico
+   1. Diseño de la investigación
+El presente estudio de mercado se desarrolla bajo un enfoque metodológico de carácter cuantitativo y un nivel exploratorio con un diseño de corte transversal.
+* Enfoque Cuantitativo: Se adopta este enfoque debido a que la investigación requiere la recolección, medición y análisis de datos estructurados. A través de la aplicación de cuestionarios estandarizados (con opciones cerradas, campos numéricos y escalas de valoración Likert), se busca cuantificar de manera objetiva las tendencias de formación continua, los patrones demográficos, las preferencias académicas y el nivel de empleabilidad de los titulados. Esto permite generar métricas robustas para justificar actualizaciones curriculares. 
+* Nivel Exploratorio: Dado que el estudio trabaja con una muestra no probabilística consolidada a partir de la recolección colaborativa de datos de múltiples grupos de trabajo (integrando a titulados y empresas del sector tecnológico), el alcance es exploratorio. Su propósito es obtener una primera aproximación empírica y describir las características actuales del mercado laboral y del perfil de los egresados, sirviendo como diagnóstico preliminar e insumo fundamental para el Plan de Desarrollo Estratégico de la Carrera. 
+* Diseño de corte Transversal: La investigación es de tipo transversal, ya que los datos tanto de los profesionales titulados como de las organizaciones empleadoras se recolectan en un único momento del tiempo. Esto proporciona una visión actual y un corte temporal preciso de las demandas del sector productivo frente a la oferta académica institucional. 
+
+
+   2. Población Objetivo 
+La población objetivo del estudio está conformada por dos grupos:
+* Titulados de la carrera de Ingeniería en Sistemas: profesionales que obtuvieron su título de licenciatura en la carrera Ingeniería de Sistemas, de la Universidad Mayor de San Simón (UMSS), Cochabamba, Bolivia, sin restricción de año de titulación ni de situación laboral actual. Se incluye tanto a quienes trabajan en una organización como a quienes no trabajan o se dedican a un negocio propio. Este grupo permite conocer quiénes son los titulados, cuánto tiempo llevan en el mercado laboral y qué interés tienen en continuar su formación profesional.
+* Empleadores del sector tecnológico: empresas públicas y privadas dedicadas al desarrollo de software o a negocios del rubro de las tecnologías. Este grupo permite estudiar los requerimientos del sector y compararlos con el perfil de formación que ofrece la carrera.
+Muestra consolidada: El análisis de este estudio no se limita a los datos recolectados por un solo grupo de trabajo. La herramienta de recolección y análisis integra las respuestas obtenidas por todos los grupos participantes, de modo que los resultados se calculan sobre un conjunto consolidado de titulados y empresas. Todas las tablas y figuras de este documento se basan en ese conjunto.
+Aporte de este grupo: Como parte de esa base común, este grupo encuestó a 10 titulados y 5 empresas. Entre las empresas, una es del ámbito público, ELFEC, una del ámbito privado, AquaHealth, y tres están dedicadas al desarrollo de software: ACM Solutions, DIHITEC y Eben Producciones. Los participantes fueron elegidos según su disponibilidad, contactándolos directamente. En el caso de las empresas, se buscaron aquellas con algún enfoque en el desarrollo de software.
+Dado que los participantes no fueron seleccionados al azar, la muestra es no probabilística. Por ello, el estudio es exploratorio: describe lo que respondieron los participantes sin pretender generalizar los resultados a toda la población de titulados.
+   3. Técnicas de recolección de datos
+Se aplicó la técnica de la encuesta, con enfoque cuantitativo, descriptivo-exploratorio y de corte transversal. Se usaron dos cuestionarios estructurados: uno para titulados (formación complementaria, interés en posgrado, empleabilidad, emprendimiento, satisfacción y asignaturas) y otro para empleadores (datos de la organización, demanda laboral y valoración del perfil profesional).
+La recolección primaria se hizo con los formularios institucionales de la Carrera: Microsoft Forms para titulados y Google Forms para empleadores. Luego ambas encuestas se replicaron en un sistema web propio (frontend en React, backend en Spring Boot y base de datos PostgreSQL) y las respuestas se cargaron en él para centralizar su procesamiento y análisis. Para evitar sesgos, las variables de análisis usan opciones cerradas, escalas Likert de 4 puntos y campos numéricos validados; las preguntas condicionales se omiten según las respuestas previas.
+•            Población: titulados de Ingeniería en Sistemas de la UMSS y organizaciones que los emplean.
+•            Muestreo: no probabilístico por conveniencia.
+•            Distribución: enlaces institucionales proporcionados por la Carrera; el equipo hizo llegar el formulario de empleadores a las organizaciones por WhatsApp y correo electrónico. (determinista)
+•            Respuestas: titulados n = 10 ; empleadores n = 5
+•            Organizaciones encuestadas: ACM Solutions , ELFEC y AquaHealth.
+La participación fue voluntaria y anónima; los datos de contacto son opcionales y no se usan en el análisis.
+
+
+   4. Pipeline de procesamiento estadístico
+El procesamiento se realiza en el backend Spring Boot sobre las respuestas cargadas en PostgreSQL, en cinco etapas:
+1.    Importación. Las respuestas de Microsoft Forms y Google Forms se cargan al sistema (indicar: importación de Excel/CSV o registro manual).
+2.        Data Wrangling. Se eliminan respuestas duplicadas o incompletas y se codifican las variables: opciones categóricas y escalas Likert de 1 a 4.
+3.      Estadística univariada. Frecuencias absolutas y relativas de cada variable; media, mediana y desviación estándar de los años de vida profesional y de las escalas Likert.
+4.  Estadística bivariada. Tablas de contingencia entre variables clave y prueba Chi-cuadrado (χ²) de independencia con α = 0,05: si p < 0,05, las variables están asociadas.
+5.    Visualización y exportación. Mapas de calor para las matrices de frecuencia cruzada, diagramas de radar para las escalas Likert, exportación en CSV/Excel y panel analítico (dashboard).
+3. Análisis de la Demanda Educativa y Perfil de los Titulados 
+Esta sección se refiere al perfil de los titulados de la carrera de Ingeniería en Sistemas de la Universidad Mayor de San Simón (UMSS) y analiza su demanda de formación profesional y laboral, si es el caso. La información proviene de la “Encuesta de Opinión a Titulados de Ingeniería en Sistemas”, realizada en Microsoft Forms en el marco del proceso de autoevaluación de la carrera y de su futura postulación a la acreditación ARCUSUR. 
+3.1. Caracterización demográfica 
+La caracterización demográfica se refiere a aquella información que describe a grupos de personas según ciertos atributos, en este caso que refiere a los titulados de la Universidad Mayor de San Simon, nos permitirá conocer quiénes son los titulados que conforman la muestra. Estas variables son relevantes para la investigación porque la edad y la situación laboral se relacionan con las necesidades de formación profesional, y el género permite identificar posibles diferencias al buscar empleo en el área tecnológica. 
+Tabla 1. Distribución de los titulados por edad, género y situación laboral (n = 148) 
+Variable
+	Categoría
+	Cantidad
+	%
+	Edad
+	19 - 22 años
+	5
+	3,4
+	23 - 26 años
+	34
+	23,0
+	27 - 30 años
+	30
+	20,3
+	31 - 34 años
+	15
+	10,1
+	35 años o más
+	64
+	43,2
+	Género
+	Hombre
+	115
+	77,7
+	Mujer
+	33
+	22,3
+	Situación laboral
+	Trabaja en una organización
+	108
+	73.0
+	No trabaja
+	25
+	16.6
+	Emprendimiento propio a tiempo completo
+	15
+	10.1
+	
+
+ 
+        
+
+
+        Figura 1. Edad de los titulados 
+  
+
+Figura 2. Género de los titulados
+  
+
+        Figura 3. Situación laboral de los titulados
+  
+
+Del total de 148 titulados, el 77,7% son hombres y el 22,3% mujeres (Tabla 1), lo que refleja una presencia femenina minoritaria en la carrera. El grupo de mayor tamaño es el de 35 años o más (43,2%), seguido del de 23 a 26 años (23,0%), por lo que la muestra combina profesionales consolidados con egresados recientes. El 73,0% trabaja en una organización, el 10,1% se dedica a un emprendimiento propio y el 16,9% no trabaja actualmente. Este último porcentaje se concentra entre los más jóvenes: 14 de las 25 personas que no trabajan (56%) tienen entre 23 y 26 años.
+3.1.1. Relación entre variables (Aplicación Chi Cuadrado)
+1. Relación entre Edad y Situación Laboral
+Para estudiar la relación entre dos variables, se usará el método de Chi Cuadrado, el cual nos permitirá saber qué hipótesis (conclusión) se tomará en cuenta para poder tomar decisiones al momento de realizar el análisis de los mismos. 
+* Descripción del problema:
+Establecer un análisis de patrones demográficas para determinar su grado de relación o dependencia que hay entre las variables de edad (variable independiente “X”) y situación laboral (variable dependiente “Y”), para el cual se plantea la siguiente hipótesis:
+* Planteamiento de la hipótesis:
+Ho: Las variables X y Y son independientes
+H1:  Existe dependencia significativa entre las variables
+* Realizamos la tabla de frecuencias observadas (tabla de contingencia):
+
+
+Edad/Situación laboral
+	19 - 22 años
+	23 - 26 años
+	27 - 30 años
+	31 - 34 años
+	35 años o más
+	Total
+	Trabaja en una organización
+	3
+	18
+	24
+	11
+	52
+	108
+	No trabaja
+	2
+	14
+	1
+	3
+	5
+	25
+	Emprendimiento propio a tiempo completo
+	0
+	2
+	5
+	1
+	7
+	15
+	Total
+	5
+	34
+	30
+	15
+	64
+	148
+	* Realizamos la tabla de frecuencias esperadas:
+
+Situación / Edad
+	19 - 22 años
+	23 - 26 años
+	27 - 30 años
+	31 - 34 años
+	35 años o más
+	Trabaja en una organización
+	3,65
+	24,81
+	21,89
+	10,95
+	46,70
+	No trabaja
+	0,84
+	5,74
+	5,07
+	2,53
+	10,81
+	Emprendimiento propio a tiempo completo
+	0,51
+	3,45
+	3,04
+	1,52
+	6,49
+	   * Calculamos el estadístico de chi cuadrado:
+ χ²=25,31 [a]
+   * Determinar el estadístico teórico:
+        Para ello se tienen: grados de libertad: (3−1)(5−1) = 8 , y α = 0,05 
+        χ² (8,0.05)= 15,51 
+   * Establecer relación entre estadísticos:
+ χ²<χ²(8,0.05)
+25.31<15.51 : NO se cumple
+   * Conclusión:
+Si( χ²<χ²(8,0.05)) 
+        Independencia
+Sino
+No hay Independencia 
+2. Relación entre Género y Situación Laboral
+   * Descripción del problema:
+Establecer un análisis de patrones demográficos para determinar el grado de relación o dependencia entre las variables género (variable independiente “X”) y situación laboral (variable dependiente “Y”), para lo cual se plantean las siguientes hipótesis.
+   * Planteamiento de la hipótesis:
+H₀: Las variables X y Y son independientes.
+H₁: Existe dependencia significativa entre las variables.
+      * Tabla de frecuencias observadas (tabla de contingencia):
+Situación laboral / Género
+	Hombre
+	Mujer
+	Total
+	Trabaja en una organización
+	85
+	23
+	108
+	No trabaja
+	17
+	8
+	25
+	Emprendimiento propio a tiempo completo
+	13
+	2
+	15
+	Total
+	115
+	33
+	148
+	      * Tabla de frecuencias esperadas:
+
+
+Situación laboral / Género
+	Hombre
+	Mujer
+	Trabaja en una organización
+	83,92
+	24,08
+	No trabaja
+	19,43
+	5,57
+	Emprendimiento propio a tiempo completo
+	11,66
+	3,34
+	
+
+
+
+
+
+
+
+
+
+Estadístico de chi cuadrado:
+ χ² = 2,12
+Estadístico teórico:
+ Grados de libertad: (3−1)(2−1) = 2, con α = 0.05
+χ²(2, 0.05) = 5,99
+Relación entre estadísticos:
+ χ² < χ²(2,0.05)
+2,12 < 5,99: SI se cumple
+Conclusión:
+Si( χ²<χ²(2,0.05))  
+Independencia
+sí no 
+ No hay independencia.
+
+
+De las tres variables demográficas, no se analizó la relación entre edad y género, ya que ambas son variables de perfil que permiten conocer las características de los titulados encuestados, pero su asociación no aporta información útil para la toma de decisiones sobre la formación o la inserción laboral. Por ello, el análisis se centró en la relación de cada una con la situación laboral. 
+3.2 Caracterización Temporal
+La encuesta no pregunta el año de egreso, por lo que la antigüedad se midió con los años de vida profesional, usados como aproximación. 
+Tabla 2. Estadísticos descriptivos de los años de vida profesional 
+Media
+	Mediana
+	Desviación estándar
+	Mínimo
+	Máximo
+	8,78
+	5,0
+	7,9
+	0
+	35
+	  
+[b]
+Tabla 3. Segmentación por años de vida profesional (n = 145) 
+Segmento
+	Cantidad
+	%
+	Media (años)
+	DE
+	Junior (0 a 5 años)
+	72
+	49,7
+	2,4
+	1,4
+	Intermedio (6 a 10 años)
+	17
+	11,7
+	7,4
+	1,4
+	Consolidado (más de 10 años)
+	56
+	38,6
+	17,6
+	5,2
+	Tabla 4. Tiempo para conseguir el primer empleo relacionado con la formación (n = 101) 
+Categoría
+	Cantidad
+	%
+	Ya trabajaba antes de titularse
+	53
+	26.4
+	Menos de 1 mes
+	10
+	5.0
+	Entre 1 y 4 meses
+	14
+	7.0
+	Entre 4 y 8 meses
+	6
+	3.0
+	Entre 8 y 12 meses
+	13
+	6.5
+	Más de 12 meses
+	5
+	2.5
+	Tabla 5. Número de empleos desde la titulación (n = 101)
+Empleo
+	Cantidad
+	Porcentaje
+	1
+	35
+	17.4
+	2
+	30
+	14.9
+	3
+	13
+	6.5
+	>3
+	23
+	11.4
+	Figura 4. Tiempo para conseguir el primer empleo 
+  
+
+Figura 5. Cantidad de empleos conseguidos a lo largo de su vida profesional
+  
+
+Los titulados tienen en promedio 8,8 años de vida profesional (DE = 7,9; mediana = 5), con un rango de 0 a 35 años (Tabla 2). La media superior a la mediana y la alta dispersión indican una distribución asimétrica con dos grupos marcados: casi la mitad (49,7%) son profesionales junior con 5 años o menos, y el 38,6% son profesionales consolidados con más de 10 años; el grupo intermedio es pequeño (11,7%) (Tabla 3). Los junior son el segmento con mayor necesidad de especialización inicial. En cuanto a la inserción laboral, el 52,5% ya trabajaba antes de titularse y el 95,0% consiguió empleo dentro de los 12 meses posteriores, mientras que solo el 5,0% tardó más de un año (Tabla 4). El tiempo de desempleo declarado es bajo: en promedio 0,8 años (DE = 1,1), el 42,7% nunca estuvo desempleado y los años de desempleo equivalen al 9,0% del total de años de vida profesional de la muestra. Respecto a la movilidad, el 65,3% ha tenido dos empleos o más desde que se tituló y el 22,8% más de tres (Tabla 5). 
+3.2.1. Relación entre variables (Aplicación Chi Cuadrado)
+
+
+3.3 Indicadores de formación continua y fuentes de financiamiento 
+        Tabla 6. Indicadores de formación continua 
+Indicador
+	Resultado
+	n
+	Tasa de formación continua (realizó o realiza programas)
+	66,2% (98 de 148)
+	148
+	Demanda potencial de posgrado (interesados)
+	83,1% (123 de 148)
+	148
+	Dependencia financiera (recursos propios)
+	91,8% (90 de 98)
+	98
+	Percepción sobre el posgrado FCyT (escala 1 a 4)
+	Media 2,67; DE 0,78
+	148
+	        Tabla 7. Nivel alcanzado y lugar de estudio (n = 98) 
+Nivel
+	Cantidad
+	%
+	Lugar donde cursó
+	Cantidad
+	%
+	Diplomado
+	66
+	33,3 
+	Dirección de Posgrado FCyT
+	30
+	15,2 
+	Maestría
+	27
+	13,6 
+	EUPG
+	21
+	10,6 
+	Especialidad
+	3
+	1,5 
+	Univ. públicas nacionales
+	20
+	10,1 
+	Doctorado
+	2
+	1.0
+	Univ. privadas nacionales
+	14
+	7,1 
+	
+
+	
+
+	
+
+	Otro
+	8
+	4,0 
+	
+
+	
+
+	
+
+	Univ. internacionales
+	5
+	2,5 
+	Tabla 8. Fuente de financiamiento (n = 98) 
+Fuente de financiamiento
+	Cantidad
+	Porcentaje
+	recursos propios
+	90
+	91.8
+	beca parcial
+	5
+	5.1
+	beca total
+	3
+	3.1
+	
+
+Tabla 9. Interés en posgrado: áreas y organización preferida 
+Área
+	Cantidad
+	%
+	Organización preferida
+	Cantidad
+	%
+	Inteligencia Artificial
+	54
+	24,2 
+	Dirección de Posgrado FCyT
+	38
+	30,9
+	Ingeniería de Software
+	29
+	13,0 
+	Univ. internacionales
+	31
+	25,2
+	Redes de Datos y Seguridad
+	25
+	11,2 
+	Univ. públicas nacionales
+	17
+	13,8
+	Base de Datos
+	10
+	4,5 
+	EUPG
+	13
+	10,6
+	Robótica
+	5
+	2,2 
+	Otro
+	11
+	8,9
+	
+
+	
+
+	
+
+	Univ. privadas nacionales
+	10
+	8,1
+	
+
+	
+
+	
+
+	IBNORCA
+	3
+	2,4
+	Tabla 10. Nivel de formación × fuente de financiamiento  
+Nivel
+	Recursos propios
+	Con beca (parcial o total)
+	Total
+	Diplomado
+	63
+	3
+	66
+	Posgrado (especialidad, maestría o doctorado)
+	27
+	5
+	32
+	Total
+	90
+	8
+	98
+	Figura 6. Nivel de formación complementaria alcanzado 
+  
+
+Figura 7. Lugar donde cursó el nivel de formación complementario
+  
+
+Figura 8. Área de posgrado de interés
+  
+
+Figura 9. Fuente de financiamiento para el nivel de formación complementario
+  
+
+El 66,2% de los titulados ha realizado o realiza algún programa de formación complementaria, y el 83,1% manifiesta interés en un posgrado en áreas de Ingeniería en Sistemas, lo que evidencia una demanda potencial alta (Tabla 6). El nivel predominante es el diplomado (67,3%), seguido de la maestría (27,6%) (Tabla 7). La UMSS capta el 52,0% de esa formación (Dirección de Posgrado FCyT 30,6% y EUPG 21,4%), pero al consultar por la preferencia futura, la suma de ambas baja al 41,5%, mientras que las universidades internacionales pasan del 5,1% al 25,2% (Tablas 7 y 9). Las áreas de mayor interés son Inteligencia Artificial (43,9%) e Ingeniería de Software (23,6%), que juntas reúnen el 67,5% de las preferencias, seguidas de Redes de Datos y Seguridad (20,3%). El financiamiento es casi totalmente personal: el 91,8% costeó sus estudios con recursos propios y solo el 8,2% contó con alguna beca (Tabla 8). Respecto a la oferta de la FCyT, la media de 2,67 y el 70,9% de acuerdo o totalmente de acuerdo indican una percepción moderadamente favorable, aunque el 29,1% considera que no existen programas afines. 
+      4. Análisis de la Oferta Laboral y Requerimientos del Sector Productivo
+En este apartado se examinan las necesidades actuales del mercado laboral y las expectativas que tienen las organizaciones empleadoras respecto a los profesionales de la Carrera de Ingeniería en Sistemas de la UMSS. La información analizada proviene del conjunto consolidado de la "Encuesta a Empleadores" ( organizaciones), complementada con la valoración de pertinencia curricular reportada por los titulados (). 
+De las 53 organizaciones encuestadas, el 75,5% (40) corresponde al sector privado y el 24,5% (13) al sector público. En cuanto a su tamaño, destacan las grandes empresas de 100 o más funcionarios (37,7%, 20 organizaciones) y las microempresas de hasta 10 funcionarios (32,1%, 17 organizaciones), seguidas de las pequeñas (17,0%, 9) y medianas (13,2%, 7). El rubro principal predominante es el desarrollo de software con el 39,6% (21), seguido por servicios de TI, telecomunicaciones/redes y startups tecnológicas (con 7,5% cada uno). 
+        Tabla 11: Indicadores de empleabilidad, contratación y cargos desempeñados según empleadores () 
+
+
+
+
+Variable
+	Categoría
+	Cantidad
+	%
+	Contratación en los últimos 5 años
+	Sí contrató ingenieros de sistemas
+	42
+	79,2
+	No contrató
+	11
+	20,8
+	Proyección de incorporación futura
+	Sí, dependiendo del crecimiento o nuevos proyectos
+	27
+	50,9
+	Sí, existe una alta probabilidad de contratación
+	16
+	30,2
+	No se tiene prevista la contratación actualmente
+	10
+	18,9
+	Nivel académico demandado
+	Licenciatura
+	38
+	71,7
+	Especialidad
+	8
+	15,1
+	Diplomado
+	4
+	7,5
+	Maestría
+	3
+	5,7
+	Medio principal de convocatoria
+	Internet y Redes sociales
+	28
+	52,8
+	Postulación competitiva (convocatorias)
+	8
+	15,1
+	Otros medios
+	8
+	15,1
+	Recomendación de terceros
+	5
+	9,4
+	Medios escritos/audiovisuales u oferta personal
+	4
+	7,5
+	Cargos desempeñados (selección múltiple)
+	Técnico (desarrollo, BD, redes, soporte TI)
+	37
+	69,8
+	Analista (sistemas, datos, procesos)
+	26
+	49,1
+	Especialista (ciberseguridad, arquitectura, infra.)
+	23
+	43,4
+	De apoyo / asistencia tecnológica
+	20
+	37,7
+	Supervisor / Coordinador de área tecnológica
+	16
+	30,2
+	Jefatura o Gerencial (proyectos, dirección TI)
+	11
+	20,8
+	Consultor tecnológico
+	7
+	13,2
+	Fuente: Elaboración propia con base en la encuesta consolidada a empleadores (), UMSS (2026). 
+Como muestra la Tabla 11, existe una absorción laboral activa: el 79,2% de las empresas ha contratado titulados de la carrera en el último quinquenio y el 81,1% (43 de 53) prevé incorporar nuevos profesionales (30,2% con alta probabilidad y 50,9% sujeto a nuevos proyectos). El grado de Licenciatura sigue siendo el requisito base de entrada (71,7%), aunque un 28,3% ya exige formación posgradual (Especialidad 15,1%, Diplomado 7,5% y Maestría 5,7%). 
+
+
+4.1 Mapeo de áreas tecnológicas de alta demanda
+Para garantizar la pertinencia del perfil profesional, se identificaron las principales tendencias y áreas de conocimiento emergentes que el mercado laboral exige en la actualidad (Pregunta 10 de la encuesta a empleadores). Tras el proceso de Data Wrangling y categorización temática de las respuestas abiertas sobre el total de empresas (, con 50 respuestas válidas), se detectaron los siguientes patrones de demanda:  
+      * Tendencias principales: Las áreas de mayor interés empresarial se concentran de forma contundente en Inteligencia Artificial y Machine Learning que alcanza 36 menciones (67,9% del total de empleadores y 72,0% de las respuestas válidas), abarcando IA generativa, programación asistida por agentes autónomos, Large Language Models (LLMs), arquitecturas RAG y MLOps, seguida de Ciberseguridad y Seguridad de la Información con 15 menciones (28,3%) y Ciencia de Datos, Analítica y Big Data con 10 menciones (18,9%).  
+      * Requerimientos emergentes: En un segundo bloque de relevancia se posicionan la Automatización Industrial, IoT y Sistemas Embebidos con 9 menciones (17,0%), la Computación en la Nube (Cloud Computing) e Infraestructura con 7 menciones (13,2%), la Gestión de Procesos, Visión de Negocio y Transformación Digital con 7 menciones (13,2%), y el diseño de Arquitectura de Software, Microservicios e Integración de APIs con 5 menciones (9,4%). 
+
+
+
+
+Área tecnológica / Tendencia emergente
+	Menciones
+	% sobre total (n=53)
+	% sobre válidas (n=50)
+	Inteligencia Artificial y Machine Learning (Agentes, LLMs, RAG, MLOps)
+	36
+	67,9%
+	72,0%
+	Ciberseguridad, DevSecOps e Informática Forense
+	15
+	28,3%
+	30,0%
+	Ciencia de Datos, Análisis de Datos y Big Data
+	10
+	18,9%
+	20,0%
+	Automatización de Procesos, IoT y Sistemas Embebidos
+	9
+	17,0%
+	18,0%
+	Computación en la Nube (Cloud Computing) e Infraestructura
+	7
+	13,2%
+	14,0%
+	Gestión de Procesos, Negocio y Transformación Digital
+	7
+	13,2%
+	14,0%
+	Arquitectura de Software, Sistemas Distribuidos y APIs
+	5
+	9,4%
+	10,0%
+	
+
+
+
+Figura 10. Áreas tecnológicas más emergentes
+
+
+  
+
+
+
+4.2 Evaluación de competencias profesionales
+Este subapartado evalúa la percepción del sector productivo respecto a las capacidades concretas que deben poseer y que actualmente demuestran los titulados, dividiéndose en competencias técnicas (hard skills) y transversales (soft skills). 
+4.2.1 Competencias técnicas (Hard Skills)
+Las competencias técnicas requeridas por el mercado se determinaron analizando las herramientas, software, plataformas y entornos de desarrollo que los empleadores consideran fundamentales (Pregunta 11). Los resultados evidencian una clara preferencia hacia el dominio de: 
+      * Herramientas de IA y Agentes Autónomos (52,8% - 28 menciones): Constituyen la principal exigencia técnica, priorizando plataformas asistidas por IA generativa y agentes de codificación (tales como Claude, OpenAI Codex, Antigravity y herramientas agénticas) orientados a optimizar la productividad y calidad del software.
+      * Plataformas Cloud e Infraestructura (15,1% - 8 menciones): Se requiere conocimiento operativo en servicios y entornos en la nube (AWS, Azure, Linux y servidores remotos).
+      * Lenguajes de Programación y Desarrollo Web/Móvil: Dominio sólido de lenguajes como Python, Java, Kotlin y frameworks modernos (9,4% - 5 menciones), junto con especialización en tecnologías web y móviles (7,5% - 4 menciones).
+      * DevOps, Seguridad y Persistencia: Manejo de herramientas de integración continua, flujos CI/CD y control de versiones como Git/GitHub (DevOps: 7,5% - 4 menciones), herramientas de ciberseguridad (5,7% - 3 menciones), ciencia de datos, automatización/IoT, motores de bases de datos y herramientas de gestión ágil (Jira, Trello) con 3,8% (2 menciones) cada una.
+Al contrastar esta demanda con la experiencia de los 148 titulados, las asignaturas que les brindaron mayor ventaja competitiva laboral fueron Base de Datos (94,6% - 140 menciones), Taller de Ingeniería de Sistemas - T.I.S. (74,3% - 110) y Redes de Computadoras (72,3% - 107), mientras que el 71,6% (106 titulados) coincide con los empleadores en que el aspecto prioritario a mejorar es la actualización constante del plan de estudios frente a las tendencias actuales. 
+
+
+Figura 11. Herramientas más demandadas
+  
+
+
+
+4.2.2 Competencias transversales (Soft Skills)
+Más allá del conocimiento técnico, el sector empleador valora fuertemente las habilidades humanas, interpersonales y de gestión. Según la matriz Likert aplicada a las 53 organizaciones, el 86,8% (46 de 53) de los empleadores está "De acuerdo" o "Totalmente de acuerdo" en que los titulados demuestran un adecuado desarrollo en competencias de comunicación efectiva, resolución de problemas, pensamiento crítico, aprendizaje continuo y trabajo en equipo, mientras que el 83,0% (44) avala sus valores de ética profesional y responsabilidad social.
+Asimismo, al analizar las respuestas abiertas de los empleadores en la Pregunta 12 sobre las habilidades indispensables para responder a las exigencias de su organización, el sistema identificó las siguientes menciones prioritarias:
+
+
+      1. Trabajo en equipo (22,6% - 12 menciones): Capacidad fundamental de integración, empatía laboral y colaboración en grupos de trabajo.
+      2. Comunicación asertiva (18,9% - 10 menciones): Expresión clara de ideas, oratoria técnica y buena comunicación interpersonal con clientes y áreas funcionales.
+      3. Resolución de problemas y pensamiento crítico (13,2% - 7 menciones): Capacidad de abstracción, análisis lógico y diagnóstico eficiente ante incidencias complejas.
+      4. Aprendizaje continuo (11,3% - 6 menciones): Predisposición proactiva para autoaprender e investigar nuevas tecnologías de forma constante.
+      5. Criterio en el uso de IA y Ciberseguridad (9,4% y 7,5%): Saber dirigir agentes de IA con criterio técnico y mantener rigurosidad en la seguridad de la información.
+      6. Inglés técnico (5,7% - 3 menciones): Comprensión y comunicación fluida en el idioma estándar de la industria y la documentación técnica.
+
+
+  
+
+4.2.3 Ejemplos prácticos de modelamiento analítico
+Para ilustrar el grado de alineación entre las competencias demostradas por los titulados, el prestigio formativo y el nivel de relacionamiento institucional con el sector productivo, se empleó el Diagrama de Radar generado por el panel analítico (dashboard) del sistema centralizado. El modelo evalúa los 18 criterios de la matriz Likert aplicada a los empleadores (), codificados en una escala de 1 a 4 (1 = Totalmente en desacuerdo, 3 = Parcialmente de acuerdo, 4 = Totalmente de acuerdo, excluyendo las respuestas "No sabe" para evitar distorsiones en la tendencia central).  
+Tabla 13. Valoración de los empleadores sobre el perfil profesional y la vinculación institucional (Ítems 1 al 18) 
+
+
+
+
+Nº
+	Criterio evaluado en la matriz de empleadores
+	Media (1-4)
+	DE
+	Acuerdo Favorable (%)
+	1
+	La Carrera de Ingeniería de Sistemas de la Universidad Mayor de San Simón brinda confianza a nuestra organización como formadora de profesionales del área tecnológica.
+	3.41
+	0.84
+	88.7%
+	2
+	Considero que el título profesional otorgado por la Carrera de Ingeniería de Sistemas es consistente con el nivel de formación y las competencias demostradas por sus titulados.
+	3.10
+	0.88
+	86.8%
+	3
+	Las autoridades de la Carrera de Ingeniería de Sistemas consultan regularmente nuestra opinión como empleadores respecto al perfil profesional y las competencias requeridas en el ámbito laboral.
+	2.39
+	1.17
+	47.2%
+	4
+	Conozco el perfil profesional y las competencias de egreso declaradas por la Carrera de Ingeniería de Sistemas.
+	3.28
+	0.67
+	84.9%
+	5
+	El perfil profesional declarado por la Carrera de Ingeniería de Sistemas es coherente con el desempeño laboral demostrado por sus titulados.
+	2.96
+	1.06
+	79.2%
+	6
+	La formación proporcionada por la Carrera de Ingeniería de Sistemas permite a sus titulados alcanzar un desempeño destacado tanto en el ámbito profesional como en su formación integral.
+	3.17
+	0.85
+	88.7%
+	7
+	La Carrera de Ingeniería de Sistemas considera nuestra opinión como empleadores e incorpora las necesidades del sector laboral en la definición y mejora de actividades de formación práctica, pasantías y modalidades de titulación.
+	2.90
+	1.11
+	58.5%
+	8
+	El desempeño profesional de los titulados de Ingeniería de Sistemas evidencia el desarrollo de competencias laborales como: comunicación efectiva, análisis y resolución de problemas, pensamiento crítico, aprendizaje continuo, trabajo en equipo, iniciativa personal y manejo adecuado de tecnologías de información.
+	3.22
+	0.81
+	86.8%
+	9
+	Los profesionales titulados de Ingeniería de Sistemas demuestran valores y actitudes relacionados con la ética profesional, responsabilidad social, inclusión, diversidad, respeto a los derechos humanos y compromiso con el medio ambiente.
+	3.29
+	0.90
+	83.0%
+	10
+	He participado en procesos de recopilación de información, evaluación o retroalimentación relacionados con el desempeño laboral de los titulados de la Carrera de Ingeniería de Sistemas.
+	2.79
+	1.15
+	52.8%
+	11
+	La Carrera de Ingeniería de Sistemas mantiene vínculos con organizaciones e instituciones que generan oportunidades laborales para sus titulados.
+	2.76
+	1.00
+	62.3%
+	12
+	He participado en actividades de vinculación con el entorno laboral y tecnológico organizadas por la Carrera de Ingeniería de Sistemas o la Facultad de Ciencias y Tecnología.
+	2.22
+	1.13
+	47.2%
+	13
+	He participado en actividades de difusión de oportunidades laborales, convocatorias, pasantías o prácticas profesionales organizadas por la Carrera de Ingeniería de Sistemas.
+	2.26
+	1.21
+	47.2%
+	14
+	He participado en actividades de vinculación entre profesionales del sector tecnológico, empleadores, docentes y estudiantes de la Carrera de Ingeniería de Sistemas para el intercambio de conocimientos, experiencias y desarrollo de trabajos conjuntos.
+	2.23
+	1.10
+	50.9%
+	15
+	Como empleador, he sido consultado sobre el desempeño profesional de los titulados de Ingeniería de Sistemas, con el propósito de retroalimentar el perfil profesional y el plan de estudios de la Carrera.
+	2.26
+	1.21
+	47.2%
+	16
+	Como empleador, la Carrera de Ingeniería de Sistemas ha consultado nuestra opinión respecto a la pertinencia de la formación impartida y su correspondencia con las necesidades del sector tecnológico y laboral.
+	2.22
+	1.25
+	43.4%
+	17
+	Cuando nuestra organización requiere profesionales del área de Sistemas, recurrimos a la Universidad Mayor de San Simón y a la Carrera de Ingeniería de Sistemas como fuente de búsqueda de talento profesional.
+	2.63
+	1.15
+	60.4%
+	18
+	He sido consultado periódicamente por la Carrera de Ingeniería de Sistemas durante sus procesos de autoevaluación y mejora continua.
+	1.98
+	1.16
+	35.8%
+	
+
+Fuente: Elaboración propia con base en la encuesta consolidada a empleadores (), UMSS (2026). 
+
+
+
+
+Figura 13: Diagrama de Radar
+  
+
+Como se observa en el Diagrama de Radar (Figura 12), el polígono presenta un comportamiento claramente asimétrico dividido en dos hemisferios que permiten diagnosticar con precisión las fortalezas y debilidades institucionales: 
+      1. Fortaleza en el perfil de egreso y calidad formativa (Hemisferio derecho, ejes 1 al 9): Existe una convergencia altamente satisfactoria (con medias cercanas o superiores a  sobre  y bajas desviaciones estándar, entre  y ) en todos los indicadores que evalúan directamente al profesional titulado. Los picos más altos del radar se registran en la confianza institucional hacia la Carrera (Ítem 1: Media = 3,41; DE = 0,84), los valores éticos y de responsabilidad social (Ítem 9: Media = 3,29; DE = 0,90), el conocimiento del perfil de egreso (Ítem 4: Media = 3,28; DE = 0,67) y el desarrollo de competencias laborales y transversales (Ítem 8: Media = 3,22; DE = 0,81), seguidos del desempeño destacado e integral (Ítem 6: Media = 3,17; DE = 0,85) y la consistencia del título profesional (Ítem 2: Media = 3,10; DE = 0,88). Asimismo, la coherencia del perfil con el desempeño (Ítem 5: Media = 2,96) y la incorporación de necesidades en prácticas/pasantías (Ítem 7: Media = 2,90) se mantienen en un rango aceptable.
+      2. Brechas críticas en relacionamiento B2B y consulta al sector productivo (Hemisferio izquierdo, ejes 3 y 10 al 18): En marcado contraste, el análisis visual revela una contracción pronunciada del polígono en los ejes vinculados a la interacción entre la Dirección de Carrera y las empresas. Las puntuaciones más bajas y con mayor dispersión () se ubican en la consulta periódica durante los procesos de autoevaluación (Ítem 18: Media = 1,98; DE = 1,16), la participación en actividades de vinculación tecnológica (Ítem 12: Media = 2,22; DE = 1,13), la consulta sobre la pertinencia del plan de estudios (Ítem 16: Media = 2,22; DE = 1,25; Ítem 15: Media = 2,26; DE = 1,21), el intercambio conjunto entre empresas, docentes y estudiantes (Ítem 14: Media = 2,23; DE = 1,10), la difusión de convocatorias y pasantías (Ítem 13: Media = 2,26; DE = 1,21) y la consulta regular de las autoridades sobre el perfil requerido (Ítem 3: Media = 2,39; DE = 1,17). Incluso la búsqueda directa de talento en la Carrera (Ítem 17: Media = 2,63) se ve limitada por la falta de canales formales.
+
+
+En conclusión, el modelamiento analítico demuestra empíricamente que el producto académico (el titulado de Ingeniería en Sistemas de la UMSS) goza de alto prestigio y solvencia técnica/humana en el mercado, pero los mecanismos institucionales de retroalimentación, bolsa de trabajo y vinculación empresarial son aún débiles, lo cual constituye una oportunidad de mejora directa para estructurar convenios de pasantías, proyectos de grado guiados por la industria y un observatorio laboral permanente.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         5. Diagnóstico y Síntesis de resultados
+5.1 Matrices de frecuencia cruzada y cruces de variables clave
+Se cruzaron cuatro pares de variables con la prueba Chi-cuadrado (α = 0,05):
+
+
+Cruce de variables
+	χ²
+	gl
+	p-valor
+	Decisión
+	Nivel de posgrado × Fuente de financiamiento
+	5.50
+	6
+	0.481
+	No hay asociación
+	Área de interés × Años de vida profesional (junior/consolidado)
+	13.61
+	4
+	0.009
+	Hay asociación (V=0.35, moderada)
+	Satisfacción global × Concordancia formación–requerimientos
+	82.99
+	9
+	<0.001
+	Hay asociación (V=0.43, moderada-fuerte)
+	Situación laboral actual × Tiempo hasta el primer empleo
+	5.84
+	10
+	0.829
+	No hay asociación
+	5.2 Hallazgos principales para la Dirección de Carrera
+         * Perfil temporal. Los titulados tienen en promedio 8.78 años de vida profesional (DE = 7.93), con mediana de 5; el 43.6 % es junior (< 5 años). Interpretación: alta dispersión y casi mitad junior → fuerte demanda de especializaciones iniciales. La media (8.78) supera a la mediana (5) por una cola de profesionales muy consolidados.
+         * Demanda de posgrado. IA (43.9 %) e Ingeniería de Software (23.6 %) concentran el 67.5 % de las preferencias. Interpretación: a un paso del 70 % → justifica abrir programas modulares/híbridos en IA e Ing. de Software.
+         * Financiamiento. El 91.8 % financió su formación con recursos propios. El χ² (nivel × financiamiento) no fue significativo (p = 0.481) → la dependencia de recursos propios es generalizada, no ligada al nivel → justifica convenios con banca y becas institucionales.
+         * Brechas de competencias. Satisfacción global = 2.78/4 y concordancia formación–requerimientos = 2.63/4. Ambas fuertemente asociadas (χ² = 82.99, p < 0.001, V = 0.43): quien está satisfecho percibe concordancia. Ambas medias por debajo de 3 → brecha moderada formación-mercado. (Diagrama de radar ya disponible en el dashboard.)
+         * Empleadores. 43 de 53 organizaciones (81.1 %) prevén contratar ingenieros de sistemas (42 ya contrataron en los últimos 5 años); el nivel de formación más demandado es Licenciatura (38 de 53).
+5.3. Resultado de cruce de variables
+5.3.1. Resultado de Edad x Situación laboral
+En el punto 3.1.1. se habló de la relación entre edad y situación laboral, del cual sus estadísticos daban como resultado que las variables son DEPENDIENTES, ya que el estadístico chi cuadrado calculado es mayor que el teórico. Sacando conclusiones que den una guía al analista, se puede dar lo siguiente:
+Variables dependientes, por ende se recomienda implementar acciones de inserción laboral dirigidas a los titulados más jóvenes, como convenios con empresas para pasantías y primer empleo, y una red de contacto entre titulados, para facilitar el ingreso al mercado laboral de quienes tienen hasta 26 años.
+Lo que respalda la recomendación es que el 41,0 % de los titulados de hasta 26 años no trabaja (16 de 39), frente al 8,9 % del grupo de 27 a 34 años (4 de 45) y el 7,8 % de los de 35 años o más (5 de 64). La dependencia se explica casi por completo por esa diferencia.
+5.3.2. Resultado de Género x situacion laboral
+En el punto 3.1.1. se habló de la relación entre género y situación laboral, del cual sus estadísticos daban como resultado que las variables son INDEPENDIENTES, ya que el estadístico chi cuadrado calculado es menor que el teórico. Sacando conclusiones que den una guía al analista se puede dar lo siguiente:
+Variables independientes, por ende no se recomienda diseñar acciones diferenciadas por género para la inserción laboral de los titulados, ya que el género no influye significativamente en su situación laboral. Las acciones de empleabilidad pueden dirigirse a toda la población de titulados por igual.
+         6. Conclusiones y propuestas estratégicas
+         1. Conclusiones del análisis de mercado
+El estudio aplicado a 148 titulados y 53 empleadores de la Carrera de Ingeniería de Sistemas (UMSS) permite concluir lo siguiente:
+
+
+         1. Perfil heterogéneo y mayoritariamente activo. El 73.0 % de los titulados se encuentra trabajando, el 10.1 % dedica tiempo completo a un emprendimiento y el 16.9 % no trabaja. La vida profesional promedio es de 8.78 años (DE = 7.93; mediana = 5), con un 43.6 % de perfil junior (< 5 años). La amplia dispersión evidencia una población que combina recién egresados con profesionales consolidados, lo que exige una oferta de formación continua diferenciada.
+
+
+         2. Alta propensión a la formación continua, concentrada en pocos niveles. El 66.2 % ya realiza o realizó formación complementaria, concentrada casi en su totalidad en diplomado (67.3 %) y maestría (27.6 %) — juntos el 94.9 %. Existe por tanto una demanda sostenida pero poco diversificada en niveles.
+
+
+         3. Demanda formativa orientada a tecnologías emergentes. Las áreas de interés de posgrado se concentran en Inteligencia Artificial (43.9 %) e Ingeniería de Software (23.6 %), sumando el 67.5 % de las preferencias. Esta tendencia es coherente con la percepción de los empleadores, cuyas menciones de áreas emergentes priorizan IA/Agentes (36 menciones), Ciberseguridad (15) y Ciencia de Datos (10).
+
+
+         4. Dependencia financiera generalizada. El 91.8 % financió su formación con recursos propios. La prueba χ² entre nivel de posgrado y fuente de financiamiento no resultó significativa (χ² = 5.50; gl = 6; p = 0.481), lo que indica que la dependencia de recursos propios no está ligada a un nivel específico, sino que es transversal a toda la población.
+
+
+         5. Brecha moderada entre formación y mercado. La satisfacción global con la formación (2.78/4) y la concordancia formación–requerimientos (2.63/4) se ubican por debajo del punto medio alto de la escala, y están fuertemente asociadas (χ² = 82.99; gl = 9; p < 0.001; V de Cramér = 0.43): la percepción de pertinencia determina la satisfacción. Esto señala una oportunidad de actualización curricular.
+
+
+         6. Fuerte demanda del sector empleador. El 81.1 % de las organizaciones (43 de 53) prevé contratar ingenieros de sistemas y el 79.2 % (42 de 53) ya lo hizo en los últimos cinco años, desempeñándose principalmente en cargos Técnico (69.8 %), Analista (49.1 %) y Especialista (43.4 %). El nivel de formación más demandado es Licenciatura, lo que confirma la vigencia del título de grado en el mercado laboral.
+
+
+Asociación significativa confirmada: área de interés × perfil (junior/consolidado) (χ² = 13.61; gl = 4; p = 0.009; V = 0.35), es decir, las preferencias de especialización varían según la madurez profesional. En contraste, situación laboral × tiempo al primer empleo no mostró asociación (p = 0.829).
+
+
+         2. Propuestas Estratégicas y Líneas de acción
+6.2.1 Fomento y diversificación de becas 
+Dado que el 91.8 % se autofinancia y que esta dependencia es transversal (χ² no significativo), se propone:
+
+
+Suscribir convenios con la banca y entidades financieras para créditos educativos blandos dirigidos a titulados.
+Crear un fondo institucional de becas parciales (actualmente solo una minoría accede a becas totales o parciales).
+Implementar esquemas de pago modular/fraccionado que reduzcan la barrera económica de ingreso al posgrado.
+
+
+6.2.2 Diseño de posgrados modulares 
+Con el 67.5 % de la demanda concentrado en IA e Ingeniería de Software se propone:
+         * Diseñar diplomados y maestrías modulares/híbridas en IA aplicada, Ingeniería de Software, Ciberseguridad y Ciencia de Datos.
+         * Estructurar los programas en módulos apilables (stackable) que permitan transitar de diplomado a especialidad y maestría, atendiendo la concentración actual en diplomado (67.3 %).
+         * Ofrecer modalidades para profesionales que trabajan (horarios flexibles, virtualidad), dado que el 73 % está laboralmente activo.
+
+
+6.2.3 Estrategias de vinculación empresarial B2B
+Ante la alta demanda del sector (81.1 % prevé contratar) y la brecha de concordancia (2.63/4), se propone:
+         * Constituir un Consejo Consultivo de Empleadores que retroalimente periódicamente el perfil profesional y el plan de estudios.
+         * Formalizar convenios de pasantías y prácticas profesionales con empresas que ya contratan titulados (42 de 53).
+         * Crear una bolsa de trabajo y red de contactos oficial de la carrera (interés confirmado en la propia encuesta de titulados).
+         * Alinear contenidos con los cargos reales de inserción (Técnico, Analista, Especialista).
+6.2.4 Creación de un observatorio permanente 
+Para institucionalizar el monitoreo (Historia de Usuario 5), se propone:
+         * Consolidar la herramienta de recolección y análisis desarrollada (importación, estadística descriptiva, cruces χ², simulación bootstrap y exportación) como observatorio permanente de titulados y empleadores.
+         * Aplicar las encuestas de forma periódica (anual/semestral) y mantener un dashboard actualizado con indicadores clave (empleabilidad, satisfacción, demanda formativa, brechas).
+         * Usar los resultados como insumo continuo para la mejora curricular y la acreditación ARCU-SUR, garantizando trazabilidad y toma de decisiones basada en evidencia.
+         7. Referencias Bibliográficas
+         * Ortega, C. (2021, 16 de julio). Datos demográficos: Qué son, cómo obtenerlos y ejemplos. QuestionPro. https://www.questionpro.com/blog/es/datos-demograficos/ 
+         * Raúl COSS (2005). Simulación, Un enfoque Práctico. Editorial LIMUSA
+         * Ross, S. M. (1999). Simulación (2da ed.). Prentice Hall.
+         * Agresti, A. (2018). An introduction to categorical data analysis (3rd ed.). Wiley.
+         * Beneitone, P., Esquetini, C., González, J., Marty Maletá, M., Siufi, G., & Wagenaar, R. (Eds.). (2007). Reflexiones y perspectivas de la educación superior en América Latina: Informe final Proyecto Tuning América Latina 2004–2007. Universidad de Deusto; Universidad de Groningen.
+         * Cohen, J. (1988). Statistical power analysis for the behavioral sciences (2nd ed.). Lawrence Erlbaum Associates.
+         * Efron, B., & Tibshirani, R. J. (1994). An introduction to the bootstrap. Chapman & Hall/CRC.
+         * Field, A. (2018). Discovering statistics using IBM SPSS Statistics (5th ed.). SAGE Publications.
+         * Hernández-Sampieri, R., & Mendoza Torres, C. P. (2018). Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta. McGraw-Hill.
+         * McKinney, W. (2022). Python for data analysis: Data wrangling with pandas, NumPy, and Jupyter (3rd ed.). O'Reilly Media.
+         * Sector Educativo del MERCOSUR. (2008). Sistema de Acreditación Regional de Carreras Universitarias del MERCOSUR (ARCU-SUR). MERCOSUR Educativo. http://edu.mercosur.int
+         * Tukey, J. W. (1977). Exploratory data analysis. Addison-Wesley.
+         * Wickham, H., & Grolemund, G. (2017). R for data science: Import, tidy, transform, visualize, and model data. O'Reilly Media.
+8. Anexos
+Cartas Empresas encuestadas
+
+
+ELFEC
+  
+
+
+
+
+
+
+
+        Aquahealth
+  
+
+
+
+
+
+
+
+
+
+Dihititec Software
+  
+
+
+
+
+
+Cartas Empresas encuestadas ACM Software Solutions
+  
+
+
+
+
+
+Cartas Empresas encuestadas Eden Producciones
+  
+
+
+
+Cartas Titulados encuestados
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+
+  
+
+
+
+  
+
+[a]Falta formula de chi cuadrado
+[b]verificar si esta bien o mal

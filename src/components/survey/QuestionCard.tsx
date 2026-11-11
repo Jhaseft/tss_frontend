@@ -15,6 +15,7 @@ export type QuestionStats = {
   section?: string;
   position: number;
   totalAnswered: number;
+  noResponseCount?: number;
   distribution?: FreqEntry[];
   mean?: number;
   stdDev?: number;
@@ -32,25 +33,30 @@ function fmt(n: number | undefined, decimals = 1) {
   return n == null ? "—" : n.toFixed(decimals);
 }
 
-function CategoricalChart({ data, totalAnswered, mean, stdDev, multi }: {
-  data: FreqEntry[]; totalAnswered: number; mean?: number; stdDev?: number; multi?: boolean;
+function CategoricalChart({ data, totalAnswered, noResponse, mean, stdDev, multi, ordered }: {
+  data: FreqEntry[]; totalAnswered: number; noResponse?: number;
+  mean?: number; stdDev?: number; multi?: boolean; ordered?: boolean;
 }) {
+  // Copia ordenada por frecuencia: solo para detectar concentración.
   const sorted = [...data].sort((a, b) => b.count - a.count);
+  // Orden de pantalla: ordinales/Likert respetan el orden de la escala (viene del backend
+  // por posición de opción); nominales y multiselección se muestran por frecuencia.
+  const display = ordered ? data : sorted;
 
   // Concentración crítica (HU2): detectar las pocas opciones que agrupan ≥70%.
   // En selección múltiple los % no suman 100, así que se evalúa cada opción por separado.
   const THRESHOLD = 70;
-  const highlight = new Set<number>();
+  const highlight = new Set<string>();
   let concentrationNote: string | null = null;
   if (multi) {
-    sorted.forEach((e, i) => { if (e.percentage >= THRESHOLD) highlight.add(i); });
+    sorted.forEach((e) => { if (e.percentage >= THRESHOLD) highlight.add(e.label); });
     if (highlight.size > 0)
       concentrationNote = `${highlight.size} opción(es) superan el ${THRESHOLD}% de los encuestados.`;
   } else if (sorted.length >= 3) {
     let cum = 0, k = 0;
     for (; k < sorted.length; k++) { cum += sorted[k].percentage; if (cum >= THRESHOLD) { k++; break; } }
     if (k <= Math.ceil(sorted.length / 2) && cum >= THRESHOLD) {
-      for (let i = 0; i < k; i++) highlight.add(i);
+      for (let i = 0; i < k; i++) highlight.add(sorted[i].label);
       concentrationNote = `Concentración crítica: ${k} opción(es) agrupan ${fmt(cum)}% de las respuestas (≥${THRESHOLD}%).`;
     }
   }
@@ -58,12 +64,12 @@ function CategoricalChart({ data, totalAnswered, mean, stdDev, multi }: {
   return (
     <div>
       <div className="space-y-2 mt-3">
-        {sorted.map((entry, i) => (
+        {display.map((entry, i) => (
           <div key={i} className="flex items-center gap-3 text-sm">
             <span className="w-24 sm:w-44 shrink-0 text-gray-600 truncate" title={entry.label}>{entry.label}</span>
             <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
               <div
-                className={`h-2 rounded-full transition-all ${highlight.has(i) ? "bg-indigo-600" : "bg-gray-800"}`}
+                className={`h-2 rounded-full transition-all ${highlight.has(entry.label) ? "bg-indigo-600" : "bg-gray-800"}`}
                 style={{ width: `${entry.percentage}%` }}
               />
             </div>
@@ -75,6 +81,7 @@ function CategoricalChart({ data, totalAnswered, mean, stdDev, multi }: {
       </div>
       <div className="mt-3 flex gap-4 text-xs text-gray-400 flex-wrap">
         <span>n = {totalAnswered}</span>
+        {noResponse != null && noResponse > 0 && <span>sin respuesta: {noResponse}</span>}
         {mean != null && <span>Media = {fmt(mean, 2)}</span>}
         {stdDev != null && <span>Desv. Est. = {fmt(stdDev, 2)}</span>}
       </div>
@@ -290,9 +297,11 @@ export function QuestionCard({ q }: { q: QuestionStats }) {
         <CategoricalChart
           data={q.distribution}
           totalAnswered={q.totalAnswered}
+          noResponse={q.noResponseCount}
           mean={q.mean}
           stdDev={q.stdDev}
           multi={q.type === "MULTIPLE_CHOICE"}
+          ordered={q.type === "SINGLE_ORDINAL" || q.type === "LIKERT"}
         />
       )}
 

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ASUS/Desktop/Trabajo/**)",
+      "Read(//c/Users/ASUS/Desktop/**)",
+      "Bash(psql --version)",
+      "Bash(where mvn *)",
+      "Bash(where java *)"
+    ]
+  }
+}
