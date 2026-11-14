@@ -5,10 +5,11 @@ import { useParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
 
 const subNav = [
-  { label: "Dashboard",  segment: "dashboard"  },
-  { label: "Análisis",   segment: "analisis"   },
-  { label: "Simulación", segment: "simulacion" },
-  { label: "Exportar",   segment: "exportar"   },
+  { label: "Dashboard",     segment: "dashboard"     },
+  { label: "Análisis",      segment: "analisis"      },
+  { label: "Multivariable", segment: "multivariable" },
+  { label: "Simulación",    segment: "simulacion"    },
+  { label: "Exportar",      segment: "exportar"      },
 ];
 
 function SurveyShell({ children }: { children: React.ReactNode }) {
