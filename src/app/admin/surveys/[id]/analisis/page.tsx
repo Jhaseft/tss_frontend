@@ -79,14 +79,22 @@ export default function AnalisisPage() {
 
   useEffect(() => {
     if (!id) return;
-    api.get<{ questions: { questionId: number; text: string; type: string; position: number; section?: string }[] }>(
-      `/api/surveys/${id}/stats`
-    )
-      .then((data) => {
-        const cats = data.questions
+    // Preguntas categóricas + variables derivadas (recodificaciones, p. ej. el segmento de
+    // experiencia a partir de "años de vida profesional"). Las derivadas llevan id negativo.
+    Promise.all([
+      api.get<{ questions: { questionId: number; text: string; type: string; position: number; section?: string }[] }>(
+        `/api/surveys/${id}/stats`),
+      api.get<{ id: number; text: string; type: string }[]>(`/api/surveys/${id}/derived-variables`)
+        .catch(() => []),
+    ])
+      .then(([stats, derived]) => {
+        const cats = stats.questions
           .filter((q) => CATEGORICAL.has(q.type))
           .map((q) => ({ id: q.questionId, text: q.text, type: q.type, position: q.position, section: q.section }));
-        setQuestions(cats);
+        const derivedVars = (derived ?? []).map((d) => ({
+          id: d.id, text: d.text, type: d.type, position: 10000, section: "Variables derivadas",
+        }));
+        setQuestions([...cats, ...derivedVars]);
       })
       .catch(() => setError("No se pudieron cargar las preguntas."));
   }, [id]);
