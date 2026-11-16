@@ -22,6 +22,7 @@ type CrossTabResult = {
   rowLabels: string[];
   colLabels: string[];
   observed: number[][];
+  expected?: number[][];      // frecuencias esperadas E = (total fila × total columna) / n
   rowPct: number[][];
   rowTotals: number[];
   colTotals: number[];
@@ -32,6 +33,8 @@ type CrossTabResult = {
   cramersV: number;
   significant: boolean;
   warning?: string;
+  lowExpectedCells?: number;
+  totalCells?: number;
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -61,14 +64,6 @@ function pLabel(p: number) {
   if (p < 0.01) return "p < 0.01";
   if (p < 0.05) return "p < 0.05";
   return `p = ${fmt(p, 3)}`;
-}
-
-function cellStyle(pct: number): { style: React.CSSProperties; textClass: string } {
-  const alpha = pct > 0 ? 0.07 + (pct / 100) * 0.83 : 0;
-  return {
-    style: { backgroundColor: `rgba(17, 24, 39, ${alpha.toFixed(3)})` },
-    textClass: alpha > 0.44 ? "text-white" : "text-gray-800",
-  };
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -283,15 +278,21 @@ export default function AnalisisPage() {
                         {row.length > 28 ? row.slice(0, 28) + "…" : row}
                       </td>
                       {result.colLabels.map((_, c) => {
-                        const cs = cellStyle(result.rowPct[r][c]);
+                        const exp = result.expected?.[r]?.[c];
+                        const lowE = exp !== undefined && exp < 5;
                         return (
                           <td key={c} className="px-2 py-2 text-center">
                             <div
-                              className={`inline-flex flex-col items-center rounded-md px-2 py-1.5 min-w-12 transition-colors ${cs.textClass}`}
-                              style={cs.style}
+                              title={`Observada: ${result.observed[r][c]} · % fila: ${fmt(result.rowPct[r][c], 1)}%`}
+                              className={`inline-flex flex-col items-center rounded-md px-2 py-1.5 min-w-14 border ${
+                                lowE ? "bg-amber-50 border-amber-300" : "bg-gray-50 border-gray-200"}`}
                             >
-                              <span className="text-xs font-bold">{result.observed[r][c]}</span>
-                              <span className="text-xs opacity-80">{fmt(result.rowPct[r][c], 1)}%</span>
+                              <span className="text-sm font-bold text-gray-900">{result.observed[r][c]}</span>
+                              {exp !== undefined && (
+                                <span className={`text-xs ${lowE ? "text-amber-700" : "text-gray-400"}`}>
+                                  E {fmt(exp, 1)}
+                                </span>
+                              )}
                             </div>
                           </td>
                         );
@@ -313,20 +314,19 @@ export default function AnalisisPage() {
               </table>
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex flex-wrap items-center gap-4">
-              <span className="text-xs text-gray-500 shrink-0">Intensidad (% fila):</span>
-              <div className="flex items-end gap-1.5">
-                {[0, 20, 40, 60, 80, 100].map((p) => {
-                  const alpha = p > 0 ? 0.07 + (p / 100) * 0.83 : 0;
-                  return (
-                    <div key={p} className="flex flex-col items-center gap-1">
-                      <div className="w-8 h-5 rounded" style={{ backgroundColor: `rgba(17,24,39,${alpha.toFixed(3)})`, border: "1px solid #e5e7eb" }} />
-                      <span className="text-xs text-gray-400">{p}%</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <span className="text-xs text-gray-400 ml-auto">Celdas: n · (% fila)</span>
+            <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <span className="text-xs text-gray-600">
+                Cada celda: <span className="font-semibold text-gray-900">conteo observado</span> ·{" "}
+                <span className="text-gray-500">E = frecuencia esperada = (total fila × total columna) ÷ n</span>
+              </span>
+              <span className="text-xs text-amber-700 flex items-center gap-1.5">
+                <span className="inline-block w-3.5 h-3.5 rounded bg-amber-50 border border-amber-300" />
+                E &lt; 5 (regla de Cochran)
+                {result.lowExpectedCells !== undefined && result.totalCells !== undefined && (
+                  <span className="text-gray-400"> · {result.lowExpectedCells}/{result.totalCells} celdas</span>
+                )}
+              </span>
+              <span className="text-xs text-gray-400 ml-auto">% de fila disponible al pasar el cursor</span>
             </div>
           </div>
 
