@@ -55,16 +55,27 @@ export default function MultivariablePage() {
   const [result, setResult] = useState<MultivariateResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Métricas Z derivadas (id negativo), p. ej. "Cantidad de cargos desempeñados".
+  const [derivedMetrics, setDerivedMetrics] = useState<Question[]>([]);
+
   const qualitative = questions.filter((q) => QUALITATIVE.has(q.type));
-  const numeric = questions.filter((q) => q.type === "NUMERIC");
+  const numeric = [...questions.filter((q) => q.type === "NUMERIC"), ...derivedMetrics];
 
   useEffect(() => {
     if (!id) return;
-    api.get<{ questions: Question[] }>(`/api/surveys/${id}/stats`)
-      .then((data) => setQuestions(
-        data.questions.map((q: any) => ({
+    Promise.all([
+      api.get<{ questions: Question[] }>(`/api/surveys/${id}/stats`),
+      api.get<{ id: number; text: string; type: string }[]>(`/api/surveys/${id}/derived-metrics`)
+        .catch(() => []),
+    ])
+      .then(([stats, metrics]) => {
+        setQuestions(stats.questions.map((q: any) => ({
           id: q.questionId, text: q.text, type: q.type, position: q.position,
-        }))))
+        })));
+        setDerivedMetrics((metrics ?? []).map((m) => ({
+          id: m.id, text: "📊 " + m.text + " (métrica derivada)", type: m.type, position: 10000,
+        })));
+      })
       .catch(() => setError("No se pudieron cargar las preguntas."));
   }, [id]);
 

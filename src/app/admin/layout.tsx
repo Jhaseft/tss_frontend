@@ -23,6 +23,11 @@ const navGroups: NavGroup[] = [
         label: "Subir encuesta",
         match: (p) => p.startsWith("/admin/surveys/upload"),
       },
+      {
+        href: "/admin/compare",
+        label: "Comparativo",
+        match: (p) => p.startsWith("/admin/compare"),
+      },
     ],
   },
   {
