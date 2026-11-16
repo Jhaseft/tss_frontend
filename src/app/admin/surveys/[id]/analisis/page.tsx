@@ -37,10 +37,17 @@ type CrossTabResult = {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const CATEGORICAL = new Set([
-  "SINGLE_NOMINAL", "SINGLE_ORDINAL", "MULTIPLE_CHOICE", "LIKERT",
+  "SINGLE_NOMINAL", "SINGLE_ORDINAL", "MULTIPLE_CHOICE", "LIKERT", "MATRIX_LIKERT",
 ]);
 
 function fmt(n: number, d = 4) { return n.toFixed(d); }
+
+// Etiqueta de opción: los ítems de matriz Likert se marcan con 📊 y se muestran casi completos.
+function optLabel(q: Question) {
+  const prefix = q.type === "MATRIX_LIKERT" ? "📊 " : "";
+  const t = q.text.length > 110 ? q.text.slice(0, 110) + "…" : q.text;
+  return prefix + t;
+}
 
 function effectLabel(v: number) {
   if (v < 0.1) return { label: "Asociación trivial", color: "text-gray-500" };
@@ -81,17 +88,32 @@ export default function AnalisisPage() {
     if (!id) return;
     // Preguntas categóricas + variables derivadas (recodificaciones, p. ej. el segmento de
     // experiencia a partir de "años de vida profesional"). Las derivadas llevan id negativo.
+    type StatsQ = {
+      questionId: number; text: string; type: string; position: number; section?: string;
+      matrixItems?: { questionId: number; text: string }[];
+    };
     Promise.all([
-      api.get<{ questions: { questionId: number; text: string; type: string; position: number; section?: string }[] }>(
-        `/api/surveys/${id}/stats`),
+      api.get<{ questions: StatsQ[] }>(`/api/surveys/${id}/stats`),
       api.get<{ id: number; text: string; type: string }[]>(`/api/surveys/${id}/derived-variables`)
         .catch(() => []),
     ])
       .then(([stats, derived]) => {
-        const cats = stats.questions
-          .filter((q) => CATEGORICAL.has(q.type))
-          .map((q) => ({ id: q.questionId, text: q.text, type: q.type, position: q.position, section: q.section }));
-        const derivedVars = (derived ?? []).map((d) => ({
+        const cats: Question[] = [];
+        for (const q of stats.questions) {
+          if (!CATEGORICAL.has(q.type)) continue;
+          // Las matrices Likert vienen agrupadas: se despliega cada ítem como una variable propia,
+          // con su questionId real (el backend cruza ítems individuales, no el grupo).
+          if (q.type === "MATRIX_LIKERT" && q.matrixItems?.length) {
+            for (const it of q.matrixItems) {
+              cats.push({ id: it.questionId, text: it.text, type: "MATRIX_LIKERT",
+                position: q.position, section: q.text });
+            }
+          } else {
+            cats.push({ id: q.questionId, text: q.text, type: q.type,
+              position: q.position, section: q.section });
+          }
+        }
+        const derivedVars: Question[] = (derived ?? []).map((d) => ({
           id: d.id, text: d.text, type: d.type, position: 10000, section: "Variables derivadas",
         }));
         setQuestions([...cats, ...derivedVars]);
@@ -146,7 +168,7 @@ export default function AnalisisPage() {
               <option value="">— Elige una pregunta —</option>
               {questions.map((q) => (
                 <option key={q.id} value={String(q.id)} disabled={String(q.id) === q2}>
-                  {q.text.length > 80 ? q.text.slice(0, 80) + "…" : q.text}
+                  {optLabel(q)}
                 </option>
               ))}
             </select>
@@ -162,7 +184,7 @@ export default function AnalisisPage() {
               <option value="">— Elige una pregunta —</option>
               {questions.map((q) => (
                 <option key={q.id} value={String(q.id)} disabled={String(q.id) === q1}>
-                  {q.text.length > 80 ? q.text.slice(0, 80) + "…" : q.text}
+                  {optLabel(q)}
                 </option>
               ))}
             </select>
